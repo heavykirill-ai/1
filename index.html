@@ -3,3040 +3,1239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Next Phone - Б/у техника с гарантией</title>
-    <link rel="icon" href="https://img.icons8.com/color/48/000000/iphone-x.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>МедЭксперт | Комплексные медицинские услуги онлайн</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #00c853;
+            --accent: #ff4081;
+            --light: #f5f9ff;
+            --dark: #263238;
+            --gray: #78909c;
+            --light-gray: #eceff1;
+            --white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        html {
-            scroll-behavior: smooth;
-        }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: #2d3748;
+            font-family: 'Roboto', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
 
-        /* Уведомления */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            z-index: 10000;
-            transform: translateX(400px);
-            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            max-width: 350px;
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
         }
 
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification.error {
-            background: linear-gradient(135deg, #e63946, #ff6b6b);
-        }
-
-        .notification i {
-            font-size: 1.25rem;
-        }
-
-        /* Loader */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .container {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s, visibility 0.5s;
-        }
-
-        .loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-top-color: #b3005e;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
-            color: white;
-            padding: 1rem;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
-            transition: padding 0.3s;
-        }
-
-        header.scrolled {
-            padding: 0.75rem 1rem;
-        }
-
-        .nav-container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 2rem;
+            padding: 15px 0;
         }
 
         .logo {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.75rem;
-            font-weight: 800;
-            text-decoration: none;
-            white-space: nowrap;
-            transition: transform 0.3s;
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .header-search {
-            position: relative;
-            flex: 1;
-            max-width: 500px;
-        }
-
-        .header-search input {
-            width: 100%;
-            padding: 0.8rem 3rem 0.8rem 1.5rem;
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 50px;
-            font-size: 0.95rem;
-            background: rgba(255,255,255,0.1);
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .header-search input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.3);
-            box-shadow: 0 0 0 3px rgba(179, 0, 94, 0.1);
-        }
-
-        .header-search input::placeholder {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .header-search button {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: rgba(255,255,255,0.8);
-            cursor: pointer;
-            padding: 0.5rem;
-            transition: color 0.3s;
-        }
-
-        .header-search button:hover {
-            color: white;
-        }
-
-        .nav-menu {
             display: flex;
-            list-style: none;
-            gap: 2rem;
             align-items: center;
+            gap: 12px;
         }
 
-        .nav-menu a {
-            color: rgba(255,255,255,0.9);
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+            color: var(--primary);
+        }
+
+        .logo-text span {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
             text-decoration: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
             position: relative;
-            padding: 0.5rem 0;
-            white-space: nowrap;
-            cursor: pointer;
         }
 
-        .nav-menu a:after {
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -5px;
             left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover {
-            color: white;
-        }
-
-        .nav-menu a:hover:after {
             width: 100%;
+            height: 2px;
+            background-color: var(--primary);
         }
 
-        .cart-counter {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            color: white;
-            border-radius: 50%;
-            padding: 0.25rem 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            margin-left: 0.3rem;
-            min-width: 20px;
-            text-align: center;
-            display: inline-block;
+        .header-actions {
+            display: flex;
+            gap: 15px;
         }
 
-        /* Mobile Menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 500;
             cursor: pointer;
-            padding: 0.5rem;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(26, 115, 232, 0.3);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-accent:hover {
+            background: #e91e63;
         }
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
-            color: white;
-            padding: 10rem 1rem 5rem;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.9), rgba(13, 71, 161, 0.9)), url('https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 100px 0;
             text-align: center;
-            margin-top: 70px;
-            position: relative;
-            overflow: hidden;
         }
 
-        .hero:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(179,0,94,0.1), transparent 50%);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            position: relative;
-            animation: fadeInUp 0.8s ease;
+        .hero h2 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
         }
 
         .hero p {
-            font-size: 1.3rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            animation: fadeInUp 0.8s ease 0.2s backwards;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* УЛУЧШЕННЫЕ ФИЛЬТРЫ 3x2 */
-        .filters {
-            background: white;
-            padding: 2.5rem;
-            margin: 2rem auto;
-            max-width: 1200px;
-            border-radius: 24px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .filters-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid #f1f3f4;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .filters-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a2e;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .filter-group label {
-            font-weight: 700;
-            color: #1a1a2e;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-group label i {
-            color: #b3005e;
-            width: 20px;
-            text-align: center;
-        }
-
-        .filter-group select,
-        .filter-group input[type="text"],
-        .filter-group input[type="number"] {
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            background: white;
-            color: #2d3748;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: #b3005e;
-            box-shadow: 0 0 0 3px rgba(179, 0, 94, 0.1);
-            transform: translateY(-1px);
-        }
-
-        .filter-group select:hover,
-        .filter-group input:hover {
-            border-color: #cbd5e0;
-        }
-
-        .price-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: linear-gradient(to right, #b3005e 0%, #b3005e var(--value), #e2e8f0 var(--value), #e2e8f0 100%);
-            outline: none;
-        }
-
-        .price-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #b3005e;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(179, 0, 94, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .price-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 15px rgba(179, 0, 94, 0.5);
-        }
-
-        .price-slider::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #b3005e;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(179, 0, 94, 0.3);
-            border: none;
-        }
-
-        .filter-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid #f1f3f4;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .filter-btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .apply-filters {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            color: white;
-        }
-
-        .apply-filters:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(179, 0, 94, 0.3);
-        }
-
-        .filter-btn:not(.apply-filters) {
-            background: linear-gradient(135deg, #6c757d, #868e96);
-            color: white;
-        }
-
-        .filter-btn:not(.apply-filters):hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
-        }
-
-        /* Products */
-        .products {
-            padding: 3rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .products h2 {
-            text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-            color: #1a1a2e;
-            font-weight: 800;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .product-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-
-        .product-card:hover:before {
-            transform: scaleX(1);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-            border-radius: 16px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .product-image img {
-            max-width: 80%;
-            max-height: 80%;
-            object-fit: contain;
-            transition: transform 0.3s;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.05);
-        }
-
-        .product-card h3 {
-            font-size: 1.25rem;
-            color: #1a1a2e;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-        }
-
-        .product-card p {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .product-meta {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.2rem;
-        }
-
-        .product-meta span {
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            padding: 0.4rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #4a5568;
-        }
-
-        .product-price {
-            font-size: 1.75rem;
-            font-weight: 800;
-            color: #b3005e;
-            margin-bottom: 1rem;
-        }
-
-        .add-to-cart {
-            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .add-to-cart:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .add-to-cart:hover:before {
-            left: 100%;
-        }
-
-        .add-to-cart:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(26,26,46,0.3);
-        }
-
-        /* Product Page */
-        .product-page {
-            display: none;
-            padding: 8rem 1rem 3rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .product-page.active {
-            display: block;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        .product-detail {
-            background: white;
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-        }
-
-        .product-header {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            margin-bottom: 3rem;
-        }
-
-        .main-image {
-            width: 100%;
-            height: 450px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .main-image img {
-            max-width: 85%;
-            max-height: 85%;
-            object-fit: contain;
-            transition: transform 0.3s;
-        }
-
-        .main-image:hover img {
-            transform: scale(1.05);
-        }
-
-        .product-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1.75rem;
-        }
-
-        .product-title {
-            font-size: 2.5rem;
-            color: #1a1a2e;
-            font-weight: 800;
-        }
-
-        .product-features {
-            margin-top: 0;
-        }
-
-        .features-list {
-            list-style: none;
-            margin-top: 1.5rem;
-        }
-
-        .features-list li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #f1f3f4;
-            display: flex;
-            align-items: center;
-        }
-
-        .features-list li:before {
-            content: "✓";
-            color: #b3005e;
-            font-weight: bold;
-            margin-right: 0.75rem;
             font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
         }
 
-        .product-description {
-            line-height: 1.7;
-            color: #4a5568;
-            font-size: 1.05rem;
+        /* Features Section */
+        .features {
+            padding: 80px 0;
         }
 
-        .back-button {
-            background: linear-gradient(135deg, #6c757d, #868e96);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            margin-bottom: 2rem;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
         }
 
-        .back-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.4);
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
         }
 
-        /* Cart Modal */
-        .cart-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 5000;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.3s ease;
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
         }
 
-        .cart-modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .cart-content {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cart-content h3 {
-            margin-bottom: 1.5rem;
-            color: #1a1a2e;
-            font-size: 1.75rem;
-            font-weight: 700;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.25rem;
-            border-bottom: 1px solid #f1f3f4;
-            transition: background 0.3s;
-            gap: 1rem;
-        }
-
-        .cart-item:hover {
-            background: #f8f9fa;
-            border-radius: 12px;
-        }
-
-        .cart-item-info {
-            flex: 1;
-        }
-
-        .cart-item-actions {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .cart-quantity {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .quantity-btn {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            color: white;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-        }
-
-        .quantity-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(179, 0, 94, 0.4);
-        }
-
-        #cartTotal {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1a1a2e;
-            margin: 1.5rem 0;
-            padding: 1rem;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-            border-radius: 12px;
+        .feature-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
             text-align: center;
         }
 
-        .cart-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
-        /* Info Modal */
-        .info-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 5000;
-            backdrop-filter: blur(10px);
-            animation: fadeIn 0.3s ease;
-        }
-
-        .info-modal.show {
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--white);
+            font-size: 28px;
         }
 
-        .info-content {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 700px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            animation: slideUp 0.3s ease;
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--primary);
         }
 
-        .info-content h3 {
-            margin-bottom: 1.5rem;
-            color: #1a1a2e;
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        /* Dashboard Section */
+        .dashboard {
+            padding: 80px 0;
+            background-color: var(--light-gray);
         }
 
-        .info-content p {
-            margin-bottom: 1rem;
-            line-height: 1.8;
-            color: #4a5568;
+        .dashboard-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--light-gray);
         }
 
-        .info-content ul {
-            margin: 1rem 0 1rem 2rem;
-            color: #4a5568;
-        }
-
-        .info-content ul li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
-        }
-
-        .close-info-btn {
-            background: linear-gradient(135deg, #6c757d, #868e96);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
+        .tab {
+            padding: 15px 30px;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            margin-top: 1.5rem;
-            width: 100%;
+            font-weight: 500;
+            color: var(--gray);
+            transition: var(--transition);
+            border-bottom: 3px solid transparent;
         }
 
-        .close-info-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+        .tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
         }
 
-        /* Admin Panel */
-        .admin-panel {
-            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
-            color: white;
-            padding: 1.5rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 9000;
+        .tab-content {
             display: none;
-            overflow-y: auto;
         }
 
-        .admin-panel.show {
+        .tab-content.active {
             display: block;
-            animation: slideDown 0.4s ease;
+            animation: fadeIn 0.5s ease;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
         }
 
-        .admin-header {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
         }
 
-        .admin-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+        .card-title {
+            font-size: 1.5rem;
+            color: var(--primary);
         }
 
-        .admin-tab {
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-
-        .admin-tab:hover {
-            background: rgba(255,255,255,0.2);
-        }
-
-        .admin-tab.active {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-        }
-
-        .admin-content {
-            background: rgba(255,255,255,0.05);
-            padding: 2rem;
-            border-radius: 20px;
-        }
-
-        .admin-section {
-            display: none;
-        }
-
-        .admin-section.active {
-            display: block;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .admin-form {
+        .calculator-grid {
             display: grid;
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
+        @media (max-width: 768px) {
+            .calculator-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
-        .form-group label {
-            font-weight: 600;
-            color: rgba(255,255,255,0.9);
+        .input-group {
+            margin-bottom: 20px;
         }
 
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            padding: 0.9rem;
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            background: rgba(255,255,255,0.95);
-            color: #1a1a2e;
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
             font-size: 1rem;
-            transition: all 0.3s ease;
-            font-family: inherit;
+            transition: var(--transition);
         }
 
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
+        .input-field:focus {
+            border-color: var(--primary);
             outline: none;
-            border-color: #b3005e;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(179, 0, 94, 0.2);
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
         }
 
-        .form-group select option {
-            background: white;
-            color: #1a1a2e;
-            padding: 12px;
-        }
-
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        .features-dynamic {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .feature-item {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .feature-item input {
-            flex: 1;
-        }
-
-        .feature-item button {
-            background: linear-gradient(135deg, #e63946, #ff6b6b);
-            color: white;
-            border: none;
-            padding: 0.9rem 1rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .feature-item button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
-        }
-
-        .add-feature-btn {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            border: none;
-            padding: 0.9rem 1.5rem;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            justify-content: center;
-        }
-
-        .add-feature-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
-        }
-
-        .admin-btn {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            color: white;
-            border: none;
-            padding: 1rem 2rem;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(179, 0, 94, 0.4);
-        }
-
-        .admin-btn.danger {
-            background: linear-gradient(135deg, #e63946, #ff6b6b);
-        }
-
-        .admin-btn.small {
-            padding: 0.6rem 1.2rem;
+        .units {
+            color: var(--gray);
             font-size: 0.9rem;
+            margin-top: 5px;
         }
 
-        .product-item {
-            background: rgba(255,255,255,0.1);
-            padding: 1.25rem;
-            border-radius: 16px;
-            margin: 0.5rem 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+        .btn-calculate {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            width: 100%;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
         }
 
-        .product-item-info {
-            flex: 1;
-            min-width: 250px;
+        .btn-calculate:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(26, 115, 232, 0.3);
         }
 
-        .product-item-actions {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            display: none;
+            animation: fadeIn 0.6s ease;
         }
 
-        .management-grid {
+        .risk-high {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: #d32f2f;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .risk-medium {
+            background-color: rgba(255, 152, 0, 0.1);
+            color: #f57c00;
+            border-left: 4px solid #f57c00;
+        }
+
+        .risk-low {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #388e3c;
+            border-left: 4px solid #388e3c;
+        }
+
+        /* Doctors Section */
+        .doctors {
+            padding: 80px 0;
+        }
+
+        .doctors-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 30px;
         }
 
-        .management-section {
-            background: rgba(255,255,255,0.05);
-            padding: 1.5rem;
-            border-radius: 16px;
-        }
-
-        .item-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 1rem;
-        }
-
-        .list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.8rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin: 8px 0;
-        }
-
-        .color-badge {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            margin-right: 10px;
-            border: 2px solid rgba(255,255,255,0.3);
-            vertical-align: middle;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .stat-card {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 20px;
-            text-align: center;
-            transition: all 0.3s ease;
-            position: relative;
+        .doctor-card {
+            background: var(--white);
+            border-radius: var(--radius);
             overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
         }
 
-        .stat-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-        }
-
-        .stat-card:hover {
+        .doctor-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .doctor-image {
+            height: 200px;
+            background-color: var(--primary);
+            background-size: cover;
+            background-position: center;
         }
 
-        .admin-toggle-btn {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            z-index: 1000;
-            font-size: 1rem;
+        .doctor-info {
+            padding: 25px;
+        }
+
+        .doctor-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+
+        .doctor-specialty {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        .doctor-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+
+        .stars {
+            color: #ffc107;
+        }
+
+        .doctor-price {
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(179, 0, 94, 0.3);
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
         }
 
-        .admin-toggle-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 15px 40px rgba(179, 0, 94, 0.5);
+        /* Premium Section */
+        .premium {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--white);
+            text-align: center;
+        }
+
+        .premium h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .premium p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+
+        .premium-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .premium-feature {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: var(--radius);
+            backdrop-filter: blur(10px);
+        }
+
+        .premium-feature i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #bbdefb;
         }
 
         /* Footer */
         footer {
-            background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
-            color: white;
-            padding: 4rem 1rem 2rem;
-            margin-top: 4rem;
+            background: var(--dark);
+            color: var(--white);
+            padding: 60px 0 20px;
         }
 
         .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
-        .footer-section h3 {
-            margin-bottom: 1.5rem;
-            font-size: 1.25rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .footer-column h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
         }
 
-        .footer-section ul {
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links {
             list-style: none;
         }
 
-        .footer-section ul li {
-            margin-bottom: 0.8rem;
+        .footer-links li {
+            margin-bottom: 10px;
         }
 
-        .footer-section a {
-            color: rgba(255,255,255,0.8);
+        .footer-links a {
+            color: #b0bec5;
             text-decoration: none;
-            transition: color 0.3s;
-            cursor: pointer;
+            transition: var(--transition);
         }
 
-        .footer-section a:hover {
-            color: white;
+        .footer-links a:hover {
+            color: var(--white);
+            padding-left: 5px;
         }
 
-        .footer-bottom {
+        .copyright {
             text-align: center;
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.7);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #b0bec5;
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         /* Responsive */
-        @media (max-width: 968px) {
-            .filter-grid {
-                grid-template-columns: repeat(2, 1fr);
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
             }
         }
 
         @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .nav-menu {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 100%;
-                background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
+            .header-top {
                 flex-direction: column;
-                padding: 2rem;
-                transition: left 0.3s ease;
-                box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+                gap: 15px;
             }
-
-            .nav-menu.active {
-                left: 0;
+            
+            .hero {
+                padding: 60px 0;
             }
-
-            .header-search {
-                order: 3;
-                width: 100%;
-                max-width: none;
+            
+            .hero h2 {
+                font-size: 1.8rem;
             }
-
-            .hero h1 {
-                font-size: 2.5rem;
+            
+            .section-title h2 {
+                font-size: 1.8rem;
             }
-
-            .product-header {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .filter-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .management-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cart-buttons {
-                flex-direction: column;
-            }
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #b3005e, #ff2b8c);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #99004d, #e02680);
         }
     </style>
 </head>
 <body>
-    <div class="loader" id="loader">
-        <div class="loader-spinner"></div>
-    </div>
-
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationText"></span>
-    </div>
-
-    <header id="header">
-        <div class="nav-container">
-            <a href="#" class="logo" id="mainLogo">Next Phone</a>
-            
-            <div class="header-search">
-                <input type="text" id="headerSearch" placeholder="Поиск товаров...">
-                <button type="button" id="headerSearchBtn"><i class="fas fa-search"></i></button>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-top">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>МедЭксперт</h1>
+                        <span>Ваше здоровье - наша забота</span>
+                    </div>
+                </div>
+                
+                <nav class="nav-links">
+                    <a href="#" class="active">Главная</a>
+                    <a href="#">Диагностика</a>
+                    <a href="#">Врачи</a>
+                    <a href="#">Анализы</a>
+                    <a href="#">Блог</a>
+                    <a href="#">О нас</a>
+                </nav>
+                
+                <div class="header-actions">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </button>
+                    <button class="btn btn-primary" id="premium-btn">
+                        <i class="fas fa-crown"></i> Премиум
+                    </button>
+                </div>
             </div>
-
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <ul class="nav-menu" id="navMenu">
-                <li><a id="mainLink">Главная</a></li>
-                <li><a id="catalogLink">Каталог</a></li>
-                <li><a id="cartLink">Корзина <span class="cart-counter">0</span></a></li>
-            </ul>
         </div>
     </header>
 
-    <div id="mainPage">
-        <section class="hero">
-            <h1>Next Phone - Б/у техника</h1>
-            <p>Качественная техника по доступным ценам с гарантией</p>
-        </section>
-
-        <section class="filters" id="catalog">
-            <div class="filters-header">
-                <h2 class="filters-title">
-                    <i class="fas fa-filter"></i> Фильтры товаров
-                </h2>
-                <button class="filter-btn" id="resetFiltersBtn">
-                    <i class="fas fa-redo"></i> Сбросить
-                </button>
-            </div>
-            
-            <div class="filter-grid">
-                <div class="filter-group">
-                    <label for="categoryFilter">
-                        <i class="fas fa-tags"></i> Категория
-                    </label>
-                    <select id="categoryFilter">
-                        <option value="all">Все категории</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="brandFilter">
-                        <i class="fas fa-mobile-alt"></i> Бренд
-                    </label>
-                    <select id="brandFilter">
-                        <option value="all">Все бренды</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="colorFilter">
-                        <i class="fas fa-palette"></i> Цвет
-                    </label>
-                    <select id="colorFilter">
-                        <option value="all">Все цвета</option>
-                    </select>
-                </div>
-                
-                <div class="filter-group">
-                    <label for="priceSlider">
-                        <i class="fas fa-ruble-sign"></i> Цена до: <span id="priceValue">100000</span> ₽
-                    </label>
-                    <input type="range" id="priceSlider" class="price-slider" min="0" max="200000" step="1000" value="100000">
-                </div>
-                
-                <div class="filter-group">
-                    <label for="priceSortFilter">
-                        <i class="fas fa-sort"></i> Сортировка
-                    </label>
-                    <select id="priceSortFilter">
-                        <option value="default">По умолчанию</option>
-                        <option value="price_asc">Сначала дешевые</option>
-                        <option value="price_desc">Сначала дорогие</option>
-                        <option value="name_asc">По названию (А-Я)</option>
-                        <option value="name_desc">По названию (Я-А)</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="availabilityFilter">
-                        <i class="fas fa-check-circle"></i> Наличие
-                    </label>
-                    <select id="availabilityFilter">
-                        <option value="all">Все товары</option>
-                        <option value="available">В наличии</option>
-                        <option value="preorder">Под заказ</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="filter-actions">
-                <div>
-                    <span id="productsCount" style="font-weight: 600; color: #1a1a2e;">Найдено товаров: 0</span>
-                </div>
-                <div>
-                    <button class="filter-btn apply-filters" id="applyFiltersBtn">
-                        <i class="fas fa-check"></i> Применить фильтры
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <section class="products">
-            <h2>Каталог товаров</h2>
-            <div class="product-grid" id="productGrid"></div>
-        </section>
-    </div>
-
-    <div class="product-page" id="productPage">
-        <button class="back-button" id="backButton">
-            <i class="fas fa-arrow-left"></i> Назад к каталогу
-        </button>
-        <div class="product-detail" id="productDetail"></div>
-    </div>
-
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <h3><i class="fas fa-shopping-cart"></i> Корзина</h3>
-            <div id="cartItems"></div>
-            <div id="cartTotal">Итого: 0 ₽</div>
-            <div class="cart-buttons">
-                <button class="filter-btn" id="closeCartBtn" style="flex: 1;">
-                    <i class="fas fa-times"></i> Закрыть
-                </button>
-                <button class="filter-btn apply-filters" id="checkoutBtn" style="flex: 1;">
-                    <i class="fas fa-check"></i> Оформить заказ
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-modal" id="infoModal">
-        <div class="info-content">
-            <h3 id="infoTitle"></h3>
-            <div id="infoBody"></div>
-            <button class="close-info-btn" id="closeInfoBtn">Закрыть</button>
-        </div>
-    </div>
-
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-header">
-            <h3><i class="fas fa-cog"></i> Панель администратора</h3>
-            <button class="admin-btn" id="closeAdminBtn">
-                <i class="fas fa-times"></i> Закрыть
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h2>Комплексные медицинские услуги онлайн</h2>
+            <p>Диагностика, консультации специалистов, расшифровка анализов и персональные рекомендации для вашего здоровья</p>
+            <button class="btn btn-accent" style="padding: 15px 30px; font-size: 1.1rem;">
+                <i class="fas fa-play-circle"></i> Начать диагностику
             </button>
         </div>
+    </section>
 
-        <div class="admin-tabs">
-            <button class="admin-tab active" data-tab="products">Товары</button>
-            <button class="admin-tab" data-tab="add-product">Добавить товар</button>
-            <button class="admin-tab" data-tab="edit-product">Редактировать</button>
-            <button class="admin-tab" data-tab="management">Управление</button>
-            <button class="admin-tab" data-tab="stats">Статистика</button>
-            <button class="admin-tab" data-tab="orders">Заказы</button>
-        </div>
-
-        <div class="admin-content">
-            <div class="admin-section active" id="products-section">
-                <h4>Управление товарами</h4>
-                <div id="adminProductsList"></div>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Наши возможности</h2>
+                <p>Все, что нужно для заботы о вашем здоровье</p>
             </div>
-
-            <div class="admin-section" id="add-product-section">
-                <h4>Добавить товар</h4>
-                <form id="addProductForm" class="admin-form">
-                    <div class="form-group">
-                        <label>Название</label>
-                        <input type="text" id="adminProductName" required>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-diagnoses"></i>
                     </div>
-                    <div class="form-group">
-                        <label>Бренд</label>
-                        <select id="adminProductBrand" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Модель</label>
-                        <input type="text" id="adminProductModel" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Категория</label>
-                        <select id="adminProductCategory" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Цвет</label>
-                        <select id="adminProductColor" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Цена</label>
-                        <input type="number" id="adminProductPrice" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label>URL изображения</label>
-                        <input type="url" id="adminProductImage" placeholder="https://example.com/image.jpg">
-                    </div>
-                    <div class="form-group">
-                        <label>Характеристики</label>
-                        <div class="features-dynamic" id="adminFeaturesList">
-                            <div class="feature-item">
-                                <input type="text" placeholder="Например: Процессор: A15 Bionic" class="feature-input">
-                            </div>
-                        </div>
-                        <button type="button" class="add-feature-btn" id="addFeatureBtn">
-                            <i class="fas fa-plus"></i> Добавить характеристику
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <label>Описание</label>
-                        <textarea id="adminProductDescription" placeholder="Подробное описание товара..."></textarea>
-                    </div>
-                    <button type="submit" class="admin-btn">
-                        <i class="fas fa-plus"></i> Добавить товар
-                    </button>
-                </form>
-            </div>
-
-            <div class="admin-section" id="edit-product-section">
-                <h4>Редактировать товар</h4>
-                <div class="form-group">
-                    <label>Выберите товар</label>
-                    <select id="editProductSelect">
-                        <option value="">-- Выберите товар --</option>
-                    </select>
+                    <h3>Онлайн-диагностика</h3>
+                    <p>Проверьте свои показатели здоровья с помощью современных диагностических алгоритмов</p>
                 </div>
-                <form id="editProductForm" class="admin-form" style="display: none;">
-                    <input type="hidden" id="editProductId">
-                    <div class="form-group">
-                        <label>Название</label>
-                        <input type="text" id="editProductName" required>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-md"></i>
                     </div>
-                    <div class="form-group">
-                        <label>Бренд</label>
-                        <select id="editProductBrand" required></select>
+                    <h3>Консультации врачей</h3>
+                    <p>Онлайн-консультации с ведущими специалистами в различных областях медицины</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-medical-alt"></i>
                     </div>
-                    <div class="form-group">
-                        <label>Модель</label>
-                        <input type="text" id="editProductModel" required>
+                    <h3>Расшифровка анализов</h3>
+                    <p>Профессиональная расшифровка лабораторных исследований с персональными рекомендациями</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
                     </div>
-                    <div class="form-group">
-                        <label>Категория</label>
-                        <select id="editProductCategory" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Цвет</label>
-                        <select id="editProductColor" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Цена</label>
-                        <input type="number" id="editProductPrice" required min="0">
-                    </div>
-                    <div class="form-group">
-                        <label>URL изображения</label>
-                        <input type="url" id="editProductImage">
-                    </div>
-                    <div class="form-group">
-                        <label>Характеристики</label>
-                        <div class="features-dynamic" id="editFeaturesList"></div>
-                        <button type="button" class="add-feature-btn" id="editAddFeatureBtn">
-                            <i class="fas fa-plus"></i> Добавить характеристику
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <label>Описание</label>
-                        <textarea id="editProductDescription"></textarea>
-                    </div>
-                    <button type="submit" class="admin-btn">
-                        <i class="fas fa-save"></i> Сохранить изменения
-                    </button>
-                </form>
+                    <h3>История здоровья</h3>
+                    <p>Хранение и отслеживание динамики ваших медицинских показателей over time</p>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="admin-section" id="management-section">
-                <h4>Управление категориями, брендами и цветами</h4>
-                <div class="management-grid">
-                    <div class="management-section">
-                        <h5>Категории</h5>
-                        <form id="addCategoryForm" class="admin-form">
-                            <div class="form-group">
-                                <input type="text" id="newCategoryName" placeholder="Новая категория" required>
-                            </div>
-                            <button type="submit" class="admin-btn small">Добавить</button>
-                        </form>
-                        <div class="item-list" id="categoriesList"></div>
+    <!-- Dashboard Section -->
+    <section class="dashboard">
+        <div class="container">
+            <div class="section-title">
+                <h2>Медицинская диагностика</h2>
+                <p>Проверьте свои показатели и получите рекомендации</p>
+            </div>
+            
+            <div class="dashboard-tabs">
+                <div class="tab active" data-tab="analyzes">Анализы</div>
+                <div class="tab" data-tab="symptoms">Симптомы</div>
+                <div class="tab" data-tab="risk">Оценка рисков</div>
+                <div class="tab" data-tab="history">История</div>
+            </div>
+            
+            <div class="tab-content active" id="analyzes-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Расшифровка анализов крови</h3>
                     </div>
                     
-                    <div class="management-section">
-                        <h5>Бренды</h5>
-                        <form id="addBrandForm" class="admin-form">
-                            <div class="form-group">
-                                <input type="text" id="newBrandName" placeholder="Новый бренд" required>
-                            </div>
-                            <button type="submit" class="admin-btn small">Добавить</button>
-                        </form>
-                        <div class="item-list" id="brandsList"></div>
+                    <div class="calculator-grid">
+                        <div class="input-group">
+                            <label for="hemoglobin">Гемоглобин</label>
+                            <input type="number" id="hemoglobin" class="input-field" placeholder="Введите значение">
+                            <div class="units">г/л (норма: 120-160)</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="leukocytes">Лейкоциты</label>
+                            <input type="number" id="leukocytes" class="input-field" placeholder="Введите значение">
+                            <div class="units">×10⁹/л (норма: 4.0-9.0)</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="glucose">Глюкоза</label>
+                            <input type="number" id="glucose" class="input-field" placeholder="Введите значение">
+                            <div class="units">ммоль/л (норма: 3.3-5.5)</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="cholesterol">Холестерин</label>
+                            <input type="number" id="cholesterol" class="input-field" placeholder="Введите значение">
+                            <div class="units">ммоль/л (норма: < 5.2)</div>
+                        </div>
                     </div>
-
-                    <div class="management-section">
-                        <h5>Цвета</h5>
-                        <form id="addColorForm" class="admin-form">
-                            <div class="form-group">
-                                <input type="text" id="newColorName" placeholder="Название цвета" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="color" id="newColorValue" value="#000000">
-                            </div>
-                            <button type="submit" class="admin-btn small">Добавить</button>
-                        </form>
-                        <div class="item-list" id="colorsList"></div>
+                    
+                    <button class="btn-calculate" onclick="analyzeBloodTests()">
+                        <i class="fas fa-vial"></i> Проанализировать показатели
+                    </button>
+                    
+                    <div id="blood-result"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Калькулятор риска СПЯ</h3>
                     </div>
+                    
+                    <div class="calculator-grid">
+                        <div class="input-group">
+                            <label for="glypican4">Глипикан 4</label>
+                            <input type="number" id="glypican4" class="input-field" placeholder="Введите значение" step="0.01">
+                            <div class="units">пмоль/л</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="age_srage">AGE/sRAGE</label>
+                            <input type="number" id="age_srage" class="input-field" placeholder="Введите значение" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Симптомы (выберите подходящие)</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+                            <div>
+                                <input type="checkbox" id="irregular-periods">
+                                <label for="irregular-periods">Нерегулярные менструации</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="excess-hair">
+                                <label for="excess-hair">Избыточное оволосение</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="acne">
+                                <label for="acne">Акне</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="weight-gain">
+                                <label for="weight-gain">Увеличение веса</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-calculate" onclick="calculatePCOSRisk()">
+                        <i class="fas fa-calculator"></i> Рассчитать риск СПЯ
+                    </button>
+                    
+                    <div id="pcos-result"></div>
                 </div>
             </div>
-
-            <div class="admin-section" id="stats-section">
-                <h4>Статистика</h4>
-                <div id="adminStats"></div>
+            
+            <div class="tab-content" id="symptoms-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Диагностика по симптомам</h3>
+                    </div>
+                    <p>Выберите симптомы, которые вас беспокоят, и наш алгоритм предложит возможные диагнозы и рекомендации.</p>
+                    <!-- Здесь будет интерфейс выбора симптомов -->
+                    <button class="btn btn-primary" style="margin-top: 20px;">
+                        <i class="fas fa-diagnoses"></i> Начать диагностику
+                    </button>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="admin-section" id="orders-section">
-                <h4>Управление заказами</h4>
-                <div class="management-grid">
-                    <div class="management-section">
-                        <h5>Новые заказы</h5>
-                        <div class="item-list" id="newOrdersList"></div>
+    <!-- Doctors Section -->
+    <section class="doctors">
+        <div class="container">
+            <div class="section-title">
+                <h2>Наши специалисты</h2>
+                <p>Консультации ведущих врачей онлайн</p>
+            </div>
+            
+            <div class="doctors-grid">
+                <div class="doctor-card">
+                    <div class="doctor-image" style="background-image: url('https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="doctor-info">
+                        <h3 class="doctor-name">Др. Иванова Ольга Петровна</h3>
+                        <p class="doctor-specialty">Гинеколог-эндокринолог, к.м.н.</p>
+                        <div class="doctor-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span>4.7 (128 отзывов)</span>
+                        </div>
+                        <p class="doctor-price">2 500 ₽ / консультация</p>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openBookingModal()">
+                            <i class="fas fa-calendar-check"></i> Записаться на прием
+                        </button>
                     </div>
-                    <div class="management-section">
-                        <h5>В обработке</h5>
-                        <div class="item-list" id="processingOrdersList"></div>
+                </div>
+                
+                <div class="doctor-card">
+                    <div class="doctor-image" style="background-image: url('https://images.unsplash.com/photo-1582750433449-648ed127bb54?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2067&q=80');"></div>
+                    <div class="doctor-info">
+                        <h3 class="doctor-name">Др. Петров Сергей Владимирович</h3>
+                        <p class="doctor-specialty">Кардиолог, д.м.н.</p>
+                        <div class="doctor-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span>5.0 (94 отзыва)</span>
+                        </div>
+                        <p class="doctor-price">3 500 ₽ / консультация</p>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openBookingModal()">
+                            <i class="fas fa-calendar-check"></i> Записаться на прием
+                        </button>
                     </div>
-                    <div class="management-section">
-                        <h5>Завершенные</h5>
-                        <div class="item-list" id="completedOrdersList"></div>
+                </div>
+                
+                <div class="doctor-card">
+                    <div class="doctor-image" style="background-image: url('https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');"></div>
+                    <div class="doctor-info">
+                        <h3 class="doctor-name">Др. Сидорова Екатерина Константиновна</h3>
+                        <p class="doctor-specialty">Эндокринолог, к.м.н.</p>
+                        <div class="doctor-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                            <span>4.3 (76 отзывов)</span>
+                        </div>
+                        <p class="doctor-price">2 000 ₽ / консультация</p>
+                        <button class="btn btn-primary" style="width: 100%;" onclick="openBookingModal()">
+                            <i class="fas fa-calendar-check"></i> Записаться на прием
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <button class="admin-toggle-btn" id="adminToggleBtn">
-        <i class="fas fa-cog"></i> Админ
-    </button>
+    <!-- Premium Section -->
+    <section class="premium">
+        <div class="container">
+            <h2>Премиум-подписка</h2>
+            <p>Расширенные возможности для вашего здоровья</p>
+            
+            <div class="premium-features">
+                <div class="premium-feature">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Расширенная диагностика</h3>
+                    <p>Полный анализ всех показателей здоровья</p>
+                </div>
+                
+                <div class="premium-feature">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Персональный врач</h3>
+                    <p>Кураторство специалиста на постоянной основе</p>
+                </div>
+                
+                <div class="premium-feature">
+                    <i class="fas fa-file-prescription"></i>
+                    <h3>Индивидуальный план</h3>
+                    <p>Персональные рекомендации по лечению и профилактике</p>
+                </div>
+                
+                <div class="premium-feature">
+                    <i class="fas fa-headset"></i>
+                    <h3>Приоритетная поддержка</h3>
+                    <p>Быстрые ответы на все ваши вопросы</p>
+                </div>
+            </div>
+            
+            <button class="btn btn-accent" style="padding: 15px 40px; font-size: 1.2rem;">
+                <i class="fas fa-crown"></i> Оформить за 990₽/месяц
+            </button>
+        </div>
+    </section>
 
+    <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Next Phone</h3>
-                <p>Качественная б/у техника с гарантией. Проверенные устройства по доступным ценам.</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>МедЭксперт</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Команда</a></li>
+                        <li><a href="#">Вакансии</a></li>
+                        <li><a href="#">Партнеры</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Услуги</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Диагностика</a></li>
+                        <li><a href="#">Консультации</a></li>
+                        <li><a href="#">Расшифровка анализов</a></li>
+                        <li><a href="#">Премиум</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Поддержка</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Помощь</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Обратная связь</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Правовая информация</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Пользовательское соглашение</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Отказ от ответственности</a></li>
+                    </ul>
+                </div>
             </div>
             
-            <div class="footer-section">
-                <h3>Контакты</h3>
-                <ul>
-                    <li><i class="fas fa-phone"></i> +7 (999) 123-45-67</li>
-                    <li><i class="fas fa-envelope"></i> info@nextphone.ru</li>
-                    <li><i class="fas fa-map-marker-alt"></i> Москва, ул. Техническая, 15</li>
-                </ul>
+            <div class="copyright">
+                <p>© 2025 МедЭксперт. Все права защищены. Информация предоставляется в ознакомительных целях и не заменяет консультацию врача.</p>
             </div>
-            
-            <div class="footer-section">
-                <h3>Информация</h3>
-                <ul>
-                    <li><a onclick="showInfo('about')">О нас</a></li>
-                    <li><a onclick="showInfo('delivery')">Доставка и оплата</a></li>
-                    <li><a onclick="showInfo('reviews')">Отзывы</a></li>
-                </ul>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2024 Next Phone. Все права защищены.</p>
         </div>
     </footer>
 
-    <script>
-        // DATA - 10 ТОВАРОВ С ПОДРОБНЫМИ ХАРАКТЕРИСТИКАМИ
-        const defaultProducts = [
-            {
-                id: 1,
-                name: "iPhone 13 Pro Max",
-                brand: "Apple",
-                model: "13 Pro Max",
-                category: "Смартфоны",
-                color: "Графитовый",
-                price: 79990,
-                image: "https://images.unsplash.com/photo-1632661674596-618e45e56d61?w=400&h=300&fit=crop",
-                description: "Флагманский смартфон Apple в отличном состоянии. Батарея держит 95% от оригинальной емкости. Полный комплект с оригинальной коробкой и аксессуарами. Гарантия 6 месяцев.",
-                features: [
-                    "Процессор: Apple A15 Bionic",
-                    "Память: 256 ГБ",
-                    "Экран: 6.7\" Super Retina XDR OLED",
-                    "Камера: Тройная 12 Мп (широкоугольная, ультраширокоугольная, телефото)",
-                    "Фронтальная камера: 12 Мп",
-                    "Батарея: 4352 мАч (95% здоровья)",
-                    "5G поддержка",
-                    "Face ID",
-                    "Водонепроницаемость IP68",
-                    "Беспроводная зарядка MagSafe"
-                ]
-            },
-            {
-                id: 2,
-                name: "MacBook Air M1",
-                brand: "Apple",
-                model: "Air M1",
-                category: "Ноутбуки",
-                color: "Серебристый",
-                price: 89990,
-                image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop",
-                description: "Революционный ноутбук на чипе Apple M1. Идеальное состояние, 2020 год выпуска. Бесшумная работа, невероятная производительность и автономность до 18 часов. Гарантия 3 месяца.",
-                features: [
-                    "Процессор: Apple M1 (8 ядер)",
-                    "ОЗУ: 8 ГБ унифицированной памяти",
-                    "Накопитель: 256 ГБ SSD",
-                    "Экран: 13.3\" Retina (2560×1600)",
-                    "Графика: Apple M1 GPU (7 ядер)",
-                    "Автономность: до 18 часов",
-                    "Вес: 1.29 кг",
-                    "Touch ID",
-                    "Клавиатура Magic Keyboard с подсветкой",
-                    "2 порта Thunderbolt/USB 4"
-                ]
-            },
-            {
-                id: 3,
-                name: "Samsung Galaxy S21 Ultra",
-                brand: "Samsung",
-                model: "Galaxy S21 Ultra",
-                category: "Смартфоны",
-                color: "Фиолетовый",
-                price: 59990,
-                image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop",
-                description: "Топовый флагман Samsung с потрясающим экраном и камерой. 256 ГБ памяти, полный комплект, состояние отличное. Поддержка S Pen. Гарантия 6 месяцев.",
-                features: [
-                    "Процессор: Exynos 2100 (5 нм)",
-                    "Память: 256 ГБ + microSD до 1 ТБ",
-                    "ОЗУ: 12 ГБ",
-                    "Экран: 6.8\" Dynamic AMOLED 2X (3200×1440, 120 Гц)",
-                    "Камера: Квадро 108 Мп + 12 Мп + 10 Мп (3x) + 10 Мп (10x)",
-                    "Фронтальная: 40 Мп",
-                    "Батарея: 5000 мАч",
-                    "Быстрая зарядка 25W",
-                    "Беспроводная зарядка 15W",
-                    "Поддержка S Pen",
-                    "5G, Wi-Fi 6E",
-                    "Водонепроницаемость IP68"
-                ]
-            },
-            {
-                id: 4,
-                name: "iPhone 12",
-                brand: "Apple",
-                model: "12",
-                category: "Смартфоны",
-                color: "Синий",
-                price: 54990,
-                image: "https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?w=400&h=300&fit=crop",
-                description: "Популярная модель iPhone с поддержкой 5G. 128 ГБ памяти, батарея 92%, отличное состояние. Полный комплект с зарядным устройством. Гарантия 6 месяцев.",
-                features: [
-                    "Процессор: Apple A14 Bionic",
-                    "Память: 128 ГБ",
-                    "Экран: 6.1\" Super Retina XDR OLED",
-                    "Камера: Двойная 12 Мп (широкоугольная + ультраширокоугольная)",
-                    "Фронтальная: 12 Мп",
-                    "Батарея: 2815 мАч (92% здоровья)",
-                    "5G поддержка",
-                    "Face ID",
-                    "Водонепроницаемость IP68",
-                    "MagSafe беспроводная зарядка",
-                    "Ceramic Shield защита экрана"
-                ]
-            },
-            {
-                id: 5,
-                name: "iPad Pro 11\" M1",
-                brand: "Apple",
-                model: "iPad Pro 11",
-                category: "Планшеты",
-                color: "Серый",
-                price: 74990,
-                image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop",
-                description: "Профессиональный планшет на чипе M1. Идеален для работы и творчества. 128 ГБ, Wi-Fi + Cellular. Состояние идеальное, гарантия 3 месяца.",
-                features: [
-                    "Процессор: Apple M1 (8 ядер)",
-                    "Память: 128 ГБ",
-                    "ОЗУ: 8 ГБ",
-                    "Экран: 11\" Liquid Retina (2388×1668, 120 Гц ProMotion)",
-                    "Камера: 12 Мп широкоугольная + 10 Мп ультраширокоугольная",
-                    "Фронтальная: 12 Мп Ultra Wide с Center Stage",
-                    "Батарея: до 10 часов",
-                    "Face ID",
-                    "Поддержка Apple Pencil 2-го поколения",
-                    "Поддержка Magic Keyboard",
-                    "Thunderbolt/USB 4",
-                    "5G (Cellular версия)"
-                ]
-            },
-            {
-                id: 6,
-                name: "Samsung Galaxy Tab S8",
-                brand: "Samsung",
-                model: "Tab S8",
-                category: "Планшеты",
-                color: "Графитовый",
-                price: 49990,
-                image: "https://images.unsplash.com/photo-1585789575347-3a9f5f7f4e1f?w=400&h=300&fit=crop",
-                description: "Мощный Android планшет с S Pen в комплекте. 128 ГБ памяти, отличный экран 120 Гц. Идеален для работы и развлечений. Гарантия 6 месяцев.",
-                features: [
-                    "Процессор: Snapdragon 8 Gen 1",
-                    "Память: 128 ГБ + microSD до 1 ТБ",
-                    "ОЗУ: 8 ГБ",
-                    "Экран: 11\" LTPS TFT (2560×1600, 120 Гц)",
-                    "Камера: 13 Мп + 6 Мп ультраширокоугольная",
-                    "Фронтальная: 12 Мп Ultra Wide",
-                    "Батарея: 8000 мАч",
-                    "Быстрая зарядка 45W",
-                    "S Pen в комплекте",
-                    "4 динамика AKG с Dolby Atmos",
-                    "Wi-Fi 6E",
-                    "Samsung DeX"
-                ]
-            },
-            {
-                id: 7,
-                name: "AirPods Pro 2",
-                brand: "Apple",
-                model: "AirPods Pro 2",
-                category: "Наушники",
-                color: "Белый",
-                price: 19990,
-                image: "https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=400&h=300&fit=crop",
-                description: "Беспроводные наушники с активным шумоподавлением нового поколения. Отличное состояние, полный комплект. Гарантия 3 месяца.",
-                features: [
-                    "Чип: Apple H2",
-                    "Активное шумоподавление",
-                    "Адаптивный прозрачный режим",
-                    "Пространственный звук с динамическим отслеживанием головы",
-                    "Персонализированный пространственный звук",
-                    "Сенсорное управление",
-                    "Защита от пота и воды IPX4",
-                    "Время работы: до 6 часов (до 30 часов с кейсом)",
-                    "MagSafe зарядка",
-                    "Поиск через Find My",
-                    "Динамик в кейсе"
-                ]
-            },
-            {
-                id: 8,
-                name: "Xiaomi 13 Pro",
-                brand: "Xiaomi",
-                model: "13 Pro",
-                category: "Смартфоны",
-                color: "Черный",
-                price: 64990,
-                image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=300&fit=crop",
-                description: "Флагман Xiaomi с камерой Leica. 256 ГБ памяти, Snapdragon 8 Gen 2, отличный экран. Состояние идеальное, гарантия 6 месяцев.",
-                features: [
-                    "Процессор: Snapdragon 8 Gen 2",
-                    "Память: 256 ГБ UFS 4.0",
-                    "ОЗУ: 12 ГБ LPDDR5X",
-                    "Экран: 6.73\" AMOLED (3200×1440, 120 Гц)",
-                    "Камера Leica: 50 Мп основная + 50 Мп телефото + 50 Мп ультраширокоугольная",
-                    "Фронтальная: 32 Мп",
-                    "Батарея: 4820 мАч",
-                    "Быстрая зарядка 120W",
-                    "Беспроводная зарядка 50W",
-                    "Обратная зарядка 10W",
-                    "5G, Wi-Fi 7",
-                    "Водонепроницаемость IP68"
-                ]
-            },
-            {
-                id: 9,
-                name: "MacBook Pro 14\" M2 Pro",
-                brand: "Apple",
-                model: "MacBook Pro 14",
-                category: "Ноутбуки",
-                color: "Серый космос",
-                price: 189990,
-                image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
-                description: "Профессиональный ноутбук для сложных задач. M2 Pro чип, 16 ГБ памяти, 512 ГБ SSD. Состояние отличное, гарантия 3 месяца.",
-                features: [
-                    "Процессор: Apple M2 Pro (10 ядер CPU, 16 ядер GPU)",
-                    "ОЗУ: 16 ГБ унифицированной памяти",
-                    "Накопитель: 512 ГБ SSD",
-                    "Экран: 14.2\" Liquid Retina XDR (3024×1964, ProMotion 120 Гц)",
-                    "Яркость: до 1600 нит (HDR)",
-                    "Автономность: до 18 часов",
-                    "Камера: 1080p FaceTime HD",
-                    "Звук: 6 динамиков, пространственный звук",
-                    "3 порта Thunderbolt 4",
-                    "HDMI, SDXC, MagSafe 3",
-                    "Touch ID",
-                    "Вес: 1.6 кг"
-                ]
-            },
-            {
-                id: 10,
-                name: "Sony WH-1000XM5",
-                brand: "Sony",
-                model: "WH-1000XM5",
-                category: "Наушники",
-                color: "Черный",
-                price: 24990,
-                image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&h=300&fit=crop",
-                description: "Лучшие полноразмерные наушники с шумоподавлением. Отличное состояние, полный комплект с чехлом. Гарантия 3 месяца.",
-                features: [
-                    "Процессор: Integrated Processor V1",
-                    "Активное шумоподавление (8 микрофонов)",
-                    "Драйверы: 30 мм",
-                    "Поддержка Hi-Res Audio, LDAC",
-                    "Время работы: до 30 часов",
-                    "Быстрая зарядка: 3 мин = 3 часа работы",
-                    "Multipoint подключение",
-                    "Speak-to-Chat",
-                    "Адаптивное управление звуком",
-                    "Складная конструкция",
-                    "Вес: 250 г",
-                    "USB-C зарядка"
-                ]
-            }
-        ];
-
-        let products = JSON.parse(localStorage.getItem('nextPhoneProducts')) || defaultProducts;
-        let categories = JSON.parse(localStorage.getItem('nextPhoneCategories')) || ["Смартфоны", "Ноутбуки", "Планшеты", "Наушники"];
-        let brands = JSON.parse(localStorage.getItem('nextPhoneBrands')) || ["Apple", "Samsung", "Xiaomi", "Sony"];
-        let colors = JSON.parse(localStorage.getItem('nextPhoneColors')) || [
-            { name: "Черный", value: "#000000" },
-            { name: "Белый", value: "#ffffff" },
-            { name: "Серебристый", value: "#c0c0c0" },
-            { name: "Графитовый", value: "#4a4a4a" },
-            { name: "Фиолетовый", value: "#8a2be2" },
-            { name: "Синий", value: "#0066cc" },
-            { name: "Серый", value: "#808080" },
-            { name: "Серый космос", value: "#3d3d3d" }
-        ];
-
-        let cart = JSON.parse(localStorage.getItem('nextPhoneCart')) || [];
-        let orders = JSON.parse(localStorage.getItem('nextPhoneOrders')) || [];
-
-        // Если товаров нет - загружаем дефолтные
-        if (products.length === 0) {
-            products = defaultProducts;
-            localStorage.setItem('nextPhoneProducts', JSON.stringify(products));
-        }
-
-        // Info content
-        const infoContent = {
-            about: {
-                title: "О нас",
-                body: `
-                    <p><strong>Next Phone</strong> — это надежный магазин качественной б/у техники с гарантией.</p>
-                    
-                    <p>Мы работаем на рынке с 2018 года и за это время заслужили доверие тысяч клиентов.</p>
-                    
-                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a2e;">Наши преимущества:</h4>
-                    <ul>
-                        <li>Тщательная проверка каждого устройства перед продажей</li>
-                        <li>Гарантия от 3 до 6 месяцев на все товары</li>
-                        <li>Честное описание состояния техники</li>
-                        <li>Возможность обмена в течение 14 дней</li>
-                        <li>Профессиональная консультация специалистов</li>
-                        <li>Доступные цены на качественную технику</li>
-                    </ul>
-                    
-                    <p style="margin-top: 1.5rem;">Мы проверяем каждое устройство по 50+ параметрам, включая состояние батареи, экрана, камер и всех функций. Вся техника проходит профессиональную чистку и диагностику.</p>
-                    
-                    <p><strong>Наша миссия</strong> — сделать качественную технику доступной для каждого, предоставляя надежный сервис и гарантии.</p>
-                `
-            },
-            delivery: {
-                title: "Доставка и оплата",
-                body: `
-                    <h4 style="margin-bottom: 1rem; color: #1a1a2e;">Способы доставки:</h4>
-                    <ul>
-                        <li><strong>Курьерская доставка по Москве</strong> — бесплатно при заказе от 30 000 ₽, иначе 500 ₽. Доставка в день заказа или на следующий день.</li>
-                        <li><strong>Доставка по России</strong> — СДЭК, Почта России. Стоимость рассчитывается индивидуально. Срок доставки 2-7 дней.</li>
-                        <li><strong>Самовывоз</strong> — бесплатно из нашего магазина по адресу: Москва, ул. Техническая, 15. Ежедневно с 10:00 до 20:00.</li>
-                    </ul>
-                    
-                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a2e;">Способы оплаты:</h4>
-                    <ul>
-                        <li><strong>Наличными</strong> — при получении курьеру или в магазине</li>
-                        <li><strong>Банковской картой</strong> — на сайте или при получении</li>
-                        <li><strong>Безналичный расчет</strong> — для юридических лиц</li>
-                        <li><strong>Рассрочка</strong> — от банков-партнеров на 3-12 месяцев без переплаты</li>
-                    </ul>
-                    
-                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a2e;">Гарантия и возврат:</h4>
-                    <p>На все товары предоставляется гарантия от 3 до 6 месяцев. Вы можете вернуть или обменять товар в течение 14 дней, если он не подошел.</p>
-                    
-                    <p style="margin-top: 1rem;"><strong>Важно:</strong> При получении обязательно проверьте товар в присутствии курьера. Убедитесь в комплектности и отсутствии внешних повреждений.</p>
-                `
-            },
-            reviews: {
-                title: "Отзывы наших клиентов",
-                body: `
-                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
-                        <p style="margin-bottom: 0.5rem;"><strong>Александр М.</strong> <span style="color: #f39c12;">★★★★★</span></p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">iPhone 13 Pro Max</p>
-                        <p>"Купил iPhone 13 Pro Max в отличном состоянии. Все работает идеально, батарея действительно 95%. Доставили на следующий день, упаковка отличная. Рекомендую!"</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
-                        <p style="margin-bottom: 0.5rem;"><strong>Мария К.</strong> <span style="color: #f39c12;">★★★★★</span></p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">MacBook Air M1</p>
-                        <p>"Очень довольна покупкой MacBook Air. Ноутбук как новый, никаких царапин. Работает быстро, батарея держит весь день. Спасибо за честность и качество!"</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
-                        <p style="margin-bottom: 0.5rem;"><strong>Дмитрий П.</strong> <span style="color: #f39c12;">★★★★★</span></p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Samsung Galaxy S21 Ultra</p>
-                        <p>"Заказал Samsung S21 Ultra. Пришел в идеальном состоянии, все аксессуары в комплекте. Камера просто огонь! Цена намного ниже, чем новый. Очень доволен!"</p>
-                    </div>
-                    
-                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
-                        <p style="margin-bottom: 0.5rem;"><strong>Елена С.</strong> <span style="color: #f39c12;">★★★★★</span></p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">iPad Pro 11"</p>
-                        <p>"Купила iPad Pro для работы. Планшет в отличном состоянии, экран без единой царапины. Консультанты помогли с выбором. Гарантия и чек на руках. Всем советую!"</p>
-                    </div>
-                    
-                    <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
-                        <p style="margin-bottom: 0.5rem;"><strong>Игорь В.</strong> <span style="color: #f39c12;">★★★★★</span></p>
-                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">AirPods Pro 2</p>
-                        <p>"Заказывал AirPods Pro 2. Пришли быстро, все оригинальное, работают отлично. Шумоподавление на высоте. Цена очень приятная. Спасибо Next Phone!"</p>
-                    </div>
-                    
-                    <p style="margin-top: 2rem; text-align: center; color: #666;">
-                        <strong>Средняя оценка: 4.9/5</strong> на основе 1247 отзывов
-                    </p>
-                `
-            }
-        };
-
-        // Show info modal
-        function showInfo(type) {
-            const modal = document.getElementById('infoModal');
-            const title = document.getElementById('infoTitle');
-            const body = document.getElementById('infoBody');
-            
-            title.textContent = infoContent[type].title;
-            body.innerHTML = infoContent[type].body;
-            
-            modal.classList.add('show');
-        }
-
-        function hideInfo() {
-            document.getElementById('infoModal').classList.remove('show');
-        }
-
-        // UTILITY FUNCTIONS
-        function saveData() {
-            try {
-                localStorage.setItem('nextPhoneProducts', JSON.stringify(products));
-                localStorage.setItem('nextPhoneCategories', JSON.stringify(categories));
-                localStorage.setItem('nextPhoneBrands', JSON.stringify(brands));
-                localStorage.setItem('nextPhoneColors', JSON.stringify(colors));
-                localStorage.setItem('nextPhoneCart', JSON.stringify(cart));
-                localStorage.setItem('nextPhoneOrders', JSON.stringify(orders));
-            } catch (e) {
-                console.error('Error saving data:', e);
-            }
-        }
-
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            const notificationText = document.getElementById('notificationText');
-            const icon = notification.querySelector('i');
-            
-            notificationText.textContent = message;
-            notification.className = `notification ${type}`;
-            
-            if (type === 'error') {
-                icon.className = 'fas fa-exclamation-circle';
-            } else {
-                icon.className = 'fas fa-check-circle';
-            }
-            
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-
-        function updateCartCounter() {
-            const counter = document.querySelector('.cart-counter');
-            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            counter.textContent = totalItems;
-        }
-
-        function getColorValue(colorName) {
-            const colorObj = colors.find(c => c.name === colorName);
-            return colorObj ? colorObj.value : '#cccccc';
-        }
-
-        function getTextColor(backgroundColor) {
-            const hex = backgroundColor.replace('#', '');
-            const r = parseInt(hex.substr(0, 2), 16);
-            const g = parseInt(hex.substr(2, 2), 16);
-            const b = parseInt(hex.substr(4, 2), 16);
-            const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-            return brightness > 128 ? '#000000' : '#ffffff';
-        }
-
-        // FEATURES MANAGEMENT
-        function addFeatureInput(containerId) {
-            const container = document.getElementById(containerId);
-            const featureItem = document.createElement('div');
-            featureItem.className = 'feature-item';
-            featureItem.innerHTML = `
-                <input type="text" placeholder="Например: Процессор: A15 Bionic" class="feature-input">
-                <button type="button" onclick="this.parentElement.remove()">
-                    <i class="fas fa-trash"></i> Удалить
+    <!-- Booking Modal -->
+    <div class="modal" id="booking-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Запись на консультацию</h3>
+                <button class="close-modal" onclick="closeBookingModal()">&times;</button>
+            </div>
+            <form id="booking-form">
+                <div class="input-group">
+                    <label for="doctor-select">Выберите врача</label>
+                    <select id="doctor-select" class="input-field">
+                        <option value="1">Др. Иванова Ольга Петровна (Гинеколог-эндокринолог)</option>
+                        <option value="2">Др. Петров Сергей Владимирович (Кардиолог)</option>
+                        <option value="3">Др. Сидорова Екатерина Константиновна (Эндокринолог)</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="booking-date">Дата консультации</label>
+                    <input type="date" id="booking-date" class="input-field">
+                </div>
+                
+                <div class="input-group">
+                    <label for="booking-time">Время консультации</label>
+                    <select id="booking-time" class="input-field">
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                    </select>
+                </div>
+                
+                <div class="input-group">
+                    <label for="patient-name">Ваше имя</label>
+                    <input type="text" id="patient-name" class="input-field" placeholder="Введите ваше имя">
+                </div>
+                
+                <div class="input-group">
+                    <label for="patient-phone">Телефон</label>
+                    <input type="tel" id="patient-phone" class="input-field" placeholder="Введите ваш телефон">
+                </div>
+                
+                <button type="button" class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="submitBooking()">
+                    <i class="fas fa-calendar-check"></i> Записаться на консультацию
                 </button>
-            `;
-            container.appendChild(featureItem);
-        }
+            </form>
+        </div>
+    </div>
 
-        function getFeaturesFromContainer(containerId) {
-            const container = document.getElementById(containerId);
-            const inputs = container.querySelectorAll('.feature-input');
-            const features = [];
-            inputs.forEach(input => {
-                if (input.value.trim()) {
-                    features.push(input.value.trim());
-                }
-            });
-            return features;
-        }
-
-        function setFeaturesToContainer(containerId, features) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            
-            if (features && features.length > 0) {
-                features.forEach(feature => {
-                    const featureItem = document.createElement('div');
-                    featureItem.className = 'feature-item';
-                    featureItem.innerHTML = `
-                        <input type="text" value="${feature}" class="feature-input">
-                        <button type="button" onclick="this.parentElement.remove()">
-                            <i class="fas fa-trash"></i> Удалить
-                        </button>
-                    `;
-                    container.appendChild(featureItem);
-                });
-            } else {
-                const featureItem = document.createElement('div');
-                featureItem.className = 'feature-item';
-                featureItem.innerHTML = `<input type="text" placeholder="Например: Процессор: A15 Bionic" class="feature-input">`;
-                container.appendChild(featureItem);
-            }
-        }
-
-        // PRODUCT FUNCTIONS
-        function renderProducts(productsToRender = products) {
-            const productGrid = document.getElementById('productGrid');
-            productGrid.innerHTML = '';
-
-            if (productsToRender.length === 0) {
-                productGrid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; padding: 3rem; color: #666;">Товары не найдены</p>';
-                document.getElementById('productsCount').textContent = 'Найдено товаров: 0';
-                return;
-            }
-
-            productsToRender.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.className = 'product-card';
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs and contents
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 
-                productCard.innerHTML = `
-                    <div class="product-image">
-                        <img src="${product.image}" alt="${product.name}" 
-                             onerror="this.src='https://images.unsplash.com/photo-1563013546-77e5ebf937e9?w=400&h=300&fit=crop'">
-                    </div>
-                    <h3>${product.name}</h3>
-                    <p>${product.brand} ${product.model}</p>
-                    <div class="product-meta">
-                        <span style="background: ${getColorValue(product.color)}; color: ${getTextColor(getColorValue(product.color))};">
-                            ${product.color}
-                        </span>
-                        <span>${product.category}</span>
-                    </div>
-                    <div class="product-price">${product.price.toLocaleString()} ₽</div>
-                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">
-                        <i class="fas fa-shopping-cart"></i> В корзину
-                    </button>
-                `;
-
-                productCard.addEventListener('click', () => showProductPage(product.id));
-                productGrid.appendChild(productCard);
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
             });
-
-            document.getElementById('productsCount').textContent = `Найдено товаров: ${productsToRender.length}`;
-        }
-
-        function showProductPage(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            document.getElementById('mainPage').style.display = 'none';
-            document.getElementById('productPage').classList.add('active');
-            window.scrollTo(0, 0);
-
-            const productDetail = document.getElementById('productDetail');
-            productDetail.innerHTML = `
-                <div class="product-header">
-                    <div class="product-gallery">
-                        <div class="main-image">
-                            <img src="${product.image}" alt="${product.name}" 
-                                 onerror="this.src='https://images.unsplash.com/photo-1563013546-77e5ebf937e9?w=600&h=400&fit=crop'">
-                        </div>
-                    </div>
-                    <div class="product-info">
-                        <h1 class="product-title">${product.name}</h1>
-                        <div class="product-meta">
-                            <span style="background: ${getColorValue(product.color)}; color: ${getTextColor(getColorValue(product.color))};">
-                                ${product.color}
-                            </span>
-                            <span>${product.brand}</span>
-                            <span>${product.category}</span>
-                        </div>
-                        <div class="product-price">${product.price.toLocaleString()} ₽</div>
-                        
-                        ${product.features && product.features.length > 0 ? `
-                        <div class="product-features">
-                            <h3>Характеристики</h3>
-                            <ul class="features-list">
-                                ${product.features.map(feature => `<li>${feature}</li>`).join('')}
-                            </ul>
-                        </div>
-                        ` : ''}
-                        
-                        <p class="product-description">${product.description}</p>
-                        
-                        <button class="add-to-cart" onclick="addToCart(${product.id})" style="max-width: 300px;">
-                            <i class="fas fa-shopping-cart"></i> Добавить в корзину
-                        </button>
-                    </div>
-                </div>
-            `;
-        }
-
-        function hideProductPage() {
-            document.getElementById('productPage').classList.remove('active');
-            document.getElementById('mainPage').style.display = 'block';
-        }
-
-        // CART FUNCTIONS
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) {
-                showNotification('Товар не найден', 'error');
-                return;
-            }
-
-            const existingItem = cart.find(item => item.productId === productId);
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({
-                    productId: productId,
-                    quantity: 1,
-                    product: product
-                });
-            }
-
-            saveData();
-            updateCartCounter();
-            showNotification('Товар добавлен в корзину!');
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.productId !== productId);
-            saveData();
-            updateCartCounter();
-            renderCart();
-            showNotification('Товар удален из корзины');
-        }
-
-        function updateCartQuantity(productId, change) {
-            const item = cart.find(item => item.productId === productId);
-            if (item) {
-                item.quantity += change;
-                if (item.quantity <= 0) {
-                    removeFromCart(productId);
-                } else {
-                    saveData();
-                    updateCartCounter();
-                    renderCart();
-                }
-            }
-        }
-
-        function renderCart() {
-            const cartItems = document.getElementById('cartItems');
-            const cartTotal = document.getElementById('cartTotal');
+        });
+        
+        // Blood test analysis function
+        function analyzeBloodTests() {
+            const hemoglobin = parseFloat(document.getElementById('hemoglobin').value);
+            const leukocytes = parseFloat(document.getElementById('leukocytes').value);
+            const glucose = parseFloat(document.getElementById('glucose').value);
+            const cholesterol = parseFloat(document.getElementById('cholesterol').value);
             
-            if (cart.length === 0) {
-                cartItems.innerHTML = '<p style="text-align: center; padding: 2rem; color: #666;">Корзина пуста</p>';
-                cartTotal.textContent = 'Итого: 0 ₽';
+            if (isNaN(hemoglobin) || isNaN(leukocytes) || isNaN(glucose) || isNaN(cholesterol)) {
+                alert('Пожалуйста, заполните все поля');
                 return;
             }
-
-            let total = 0;
-            cartItems.innerHTML = '';
-
-            cart.forEach(item => {
-                const itemTotal = item.product.price * item.quantity;
-                total += itemTotal;
-
-                const cartItem = document.createElement('div');
-                cartItem.className = 'cart-item';
-                cartItem.innerHTML = `
-                    <div class="cart-item-info">
-                        <strong>${item.product.name}</strong>
-                        <div style="color: #666; font-size: 0.9rem;">${item.product.price.toLocaleString()} ₽ × ${item.quantity} = ${itemTotal.toLocaleString()} ₽</div>
-                    </div>
-                    <div class="cart-item-actions">
-                        <div class="cart-quantity">
-                            <button class="quantity-btn" onclick="updateCartQuantity(${item.productId}, -1)">-</button>
-                            <span style="min-width: 30px; text-align: center;">${item.quantity}</span>
-                            <button class="quantity-btn" onclick="updateCartQuantity(${item.productId}, 1)">+</button>
-                        </div>
-                        <button class="admin-btn danger small" onclick="removeFromCart(${item.productId})" title="Удалить">
-                            <i class="fas fa-trash"></i>
-                        </button>
+            
+            let issues = [];
+            
+            if (hemoglobin < 120) issues.push("Низкий гемоглобин (анемия)");
+            else if (hemoglobin > 160) issues.push("Повышенный гемоглобин");
+            
+            if (leukocytes < 4.0) issues.push("Низкий уровень лейкоцитов (лейкопения)");
+            else if (leukocytes > 9.0) issues.push("Повышенный уровень лейкоцитов (лейкоцитоз)");
+            
+            if (glucose < 3.3) issues.push("Низкий уровень глюкозы (гипогликемия)");
+            else if (glucose > 5.5) issues.push("Повышенный уровень глюкозы (гипергликемия)");
+            
+            if (cholesterol > 5.2) issues.push("Повышенный уровень холестерина");
+            
+            const resultDiv = document.getElementById('blood-result');
+            
+            if (issues.length === 0) {
+                resultDiv.innerHTML = `
+                    <div class="risk-low">
+                        <i class="fas fa-check-circle"></i> Все показатели в норме. Рекомендуется продолжать вести здоровый образ жизни.
                     </div>
                 `;
-                cartItems.appendChild(cartItem);
-            });
-
-            cartTotal.textContent = `Итого: ${total.toLocaleString()} ₽`;
-        }
-
-        function showCart() {
-            renderCart();
-            document.getElementById('cartModal').classList.add('show');
-        }
-
-        function hideCart() {
-            document.getElementById('cartModal').classList.remove('show');
-        }
-
-        // FILTER FUNCTIONS
-        function applyFilters() {
-            const category = document.getElementById('categoryFilter').value;
-            const brand = document.getElementById('brandFilter').value;
-            const color = document.getElementById('colorFilter').value;
-            const priceMax = parseInt(document.getElementById('priceSlider').value);
-            const sortBy = document.getElementById('priceSortFilter').value;
-            const searchTerm = document.getElementById('headerSearch').value.toLowerCase().trim();
-
-            let filteredProducts = products.filter(product => {
-                if (searchTerm && !(
-                    product.name.toLowerCase().includes(searchTerm) ||
-                    product.brand.toLowerCase().includes(searchTerm) ||
-                    product.model.toLowerCase().includes(searchTerm) ||
-                    product.description.toLowerCase().includes(searchTerm)
-                )) {
-                    return false;
-                }
-
-                if (category !== 'all' && product.category !== category) return false;
-                if (brand !== 'all' && product.brand !== brand) return false;
-                if (color !== 'all' && product.color !== color) return false;
-                if (product.price > priceMax) return false;
-                
-                return true;
-            });
-
-            // Sorting
-            if (sortBy === 'price_asc') {
-                filteredProducts.sort((a, b) => a.price - b.price);
-            } else if (sortBy === 'price_desc') {
-                filteredProducts.sort((a, b) => b.price - a.price);
-            } else if (sortBy === 'name_asc') {
-                filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-            } else if (sortBy === 'name_desc') {
-                filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-            }
-
-            renderProducts(filteredProducts);
-        }
-
-        function resetFilters() {
-            document.getElementById('categoryFilter').value = 'all';
-            document.getElementById('brandFilter').value = 'all';
-            document.getElementById('colorFilter').value = 'all';
-            document.getElementById('priceSlider').value = 100000;
-            document.getElementById('priceSortFilter').value = 'default';
-            document.getElementById('headerSearch').value = '';
-            document.getElementById('availabilityFilter').value = 'all';
-            document.getElementById('priceValue').textContent = '100000';
-            updatePriceSliderBackground();
-            renderProducts();
-        }
-
-        function updatePriceSliderBackground() {
-            const slider = document.getElementById('priceSlider');
-            const value = (slider.value - slider.min) / (slider.max - slider.min) * 100;
-            slider.style.setProperty('--value', value + '%');
-        }
-
-        // ADMIN FUNCTIONS (сокращенная версия для экономии места)
-        function showAdminPanel() {
-            document.getElementById('adminPanel').classList.add('show');
-            loadAdminData();
-        }
-
-        function hideAdminPanel() {
-            document.getElementById('adminPanel').classList.remove('show');
-        }
-
-        function switchAdminTab(tabName) {
-            document.querySelectorAll('.admin-section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-
-            document.getElementById(`${tabName}-section`).classList.add('active');
-            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-        }
-
-        function loadAdminData() {
-            loadSelectOptions();
-            renderAdminProducts();
-            renderManagementLists();
-            renderStats();
-            renderOrders();
-        }
-
-        function loadSelectOptions() {
-            const categorySelects = document.querySelectorAll('select[id$="Category"]');
-            categorySelects.forEach(select => {
-                const currentValue = select.value;
-                select.innerHTML = '<option value="">Выберите категорию</option>' +
-                    categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-                if (currentValue) select.value = currentValue;
-            });
-
-            const brandSelects = document.querySelectorAll('select[id$="Brand"]');
-            brandSelects.forEach(select => {
-                const currentValue = select.value;
-                select.innerHTML = '<option value="">Выберите бренд</option>' +
-                    brands.map(brand => `<option value="${brand}">${brand}</option>`).join('');
-                if (currentValue) select.value = currentValue;
-            });
-
-            const colorSelects = document.querySelectorAll('select[id$="Color"]');
-            colorSelects.forEach(select => {
-                const currentValue = select.value;
-                select.innerHTML = '<option value="">Выберите цвет</option>' +
-                    colors.map(color => `<option value="${color.name}">${color.name}</option>`).join('');
-                if (currentValue) select.value = currentValue;
-            });
-
-            const editProductSelect = document.getElementById('editProductSelect');
-            const currentEditValue = editProductSelect.value;
-            editProductSelect.innerHTML = '<option value="">-- Выберите товар --</option>' +
-                products.map(product => `<option value="${product.id}">${product.name}</option>`).join('');
-            if (currentEditValue) editProductSelect.value = currentEditValue;
-        }
-
-        function renderAdminProducts() {
-            const productsList = document.getElementById('adminProductsList');
-            if (products.length === 0) {
-                productsList.innerHTML = '<p style="text-align: center; padding: 2rem;">Нет товаров</p>';
-                return;
-            }
-
-            productsList.innerHTML = products.map(product => `
-                <div class="product-item">
-                    <div class="product-item-info">
-                        <strong>${product.name}</strong>
-                        <div>${product.brand} ${product.model} | ${product.category} | ${product.color}</div>
-                        <div style="color: #b3005e; font-weight: 600;">${product.price.toLocaleString()} ₽</div>
-                    </div>
-                    <div class="product-item-actions">
-                        <button class="admin-btn small" onclick="editProductSelect(${product.id})">
-                            <i class="fas fa-edit"></i> Редактировать
-                        </button>
-                        <button class="admin-btn danger small" onclick="deleteProduct(${product.id})">
-                            <i class="fas fa-trash"></i> Удалить
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderManagementLists() {
-            document.getElementById('categoriesList').innerHTML = categories.map(category => `
-                <div class="list-item">
-                    <span>${category}</span>
-                    <button class="admin-btn danger small" onclick="deleteCategory('${category}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
-
-            document.getElementById('brandsList').innerHTML = brands.map(brand => `
-                <div class="list-item">
-                    <span>${brand}</span>
-                    <button class="admin-btn danger small" onclick="deleteBrand('${brand}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
-
-            document.getElementById('colorsList').innerHTML = colors.map(color => `
-                <div class="list-item">
-                    <span><span class="color-badge" style="background-color: ${color.value}"></span>${color.name}</span>
-                    <button class="admin-btn danger small" onclick="deleteColor('${color.name}')">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        function renderStats() {
-            const totalProducts = products.length;
-            const totalCategories = categories.length;
-            const totalBrands = brands.length;
-            const totalColors = colors.length;
-            const totalCartItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-            const totalOrders = orders.length;
-
-            document.getElementById('adminStats').innerHTML = `
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number">${totalProducts}</div>
-                        <div>Товаров</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${totalCategories}</div>
-                        <div>Категорий</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${totalBrands}</div>
-                        <div>Брендов</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${totalColors}</div>
-                        <div>Цветов</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${totalCartItems}</div>
-                        <div>В корзине</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number">${totalOrders}</div>
-                        <div>Заказов</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function renderOrders() {
-            const newOrdersList = document.getElementById('newOrdersList');
-            const processingOrdersList = document.getElementById('processingOrdersList');
-            const completedOrdersList = document.getElementById('completedOrdersList');
-            
-            newOrdersList.innerHTML = '';
-            processingOrdersList.innerHTML = '';
-            completedOrdersList.innerHTML = '';
-            
-            if (orders.length === 0) {
-                newOrdersList.innerHTML = '<p style="text-align: center; padding: 1rem;">Нет заказов</p>';
-                return;
-            }
-            
-            orders.forEach(order => {
-                const orderElement = document.createElement('div');
-                orderElement.className = 'list-item';
-                orderElement.innerHTML = `
-                    <div>
-                        <strong>Заказ #${order.id}</strong>
-                        <div>${order.items.length} товаров</div>
-                        <div style="color: #b3005e;">${order.total.toLocaleString()} ₽</div>
-                        <div style="font-size: 0.85rem; color: #999;">${order.date}</div>
-                    </div>
-                    <div>
-                        ${order.status !== 'completed' ? `
-                        <button class="admin-btn small" onclick="changeOrderStatus(${order.id}, '${order.status === 'new' ? 'processing' : 'completed'}')">
-                            ${order.status === 'new' ? 'В обработку' : 'Завершить'}
-                        </button>
-                        ` : '<span style="color: #28a745;">✓ Завершен</span>'}
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="risk-medium">
+                        <i class="fas fa-exclamation-triangle"></i> Обнаружены отклонения: ${issues.join(', ')}. 
+                        Рекомендуется консультация специалиста для уточнения диагноза.
                     </div>
                 `;
-                
-                if (order.status === 'new') {
-                    newOrdersList.appendChild(orderElement);
-                } else if (order.status === 'processing') {
-                    processingOrdersList.appendChild(orderElement);
-                } else {
-                    completedOrdersList.appendChild(orderElement);
-                }
-            });
-        }
-
-        function changeOrderStatus(orderId, newStatus) {
-            const order = orders.find(o => o.id === orderId);
-            if (order) {
-                order.status = newStatus;
-                saveData();
-                renderOrders();
-                showNotification('Статус заказа обновлен');
             }
-        }
-
-        function addProduct(productData) {
-            const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-            products.push({ id: newId, ...productData });
-            saveData();
-            renderProducts();
-            loadAdminData();
-            showNotification('Товар успешно добавлен!');
-        }
-
-        function editProductSelect(productId) {
-            const product = products.find(p => p.id === productId);
-            if (!product) return;
-
-            switchAdminTab('edit-product');
             
-            document.getElementById('editProductSelect').value = productId;
-            document.getElementById('editProductForm').style.display = 'block';
-            document.getElementById('editProductId').value = product.id;
-            document.getElementById('editProductName').value = product.name;
-            document.getElementById('editProductBrand').value = product.brand;
-            document.getElementById('editProductModel').value = product.model;
-            document.getElementById('editProductCategory').value = product.category;
-            document.getElementById('editProductColor').value = product.color;
-            document.getElementById('editProductPrice').value = product.price;
-            document.getElementById('editProductImage').value = product.image;
-            document.getElementById('editProductDescription').value = product.description;
+            resultDiv.style.display = 'block';
+        }
+        
+        // PCOS risk calculation function
+        function calculatePCOSRisk() {
+            const glypican4 = parseFloat(document.getElementById('glypican4').value);
+            const age_srage = parseFloat(document.getElementById('age_srage').value);
             
-            setFeaturesToContainer('editFeaturesList', product.features);
-        }
-
-        function updateProduct(productId, productData) {
-            const index = products.findIndex(p => p.id === productId);
-            if (index !== -1) {
-                products[index] = { ...products[index], ...productData };
-                saveData();
-                renderProducts();
-                loadAdminData();
-                showNotification('Товар успешно обновлен!');
+            if (isNaN(glypican4) || isNaN(age_srage)) {
+                alert('Пожалуйста, заполните все поля');
+                return;
             }
-        }
-
-        function deleteProduct(productId) {
-            if (confirm('Вы уверены, что хотите удалить этот товар?')) {
-                products = products.filter(p => p.id !== productId);
-                saveData();
-                renderProducts();
-                loadAdminData();
-                showNotification('Товар удален');
-            }
-        }
-
-        function addCategory(categoryName) {
-            if (!categories.includes(categoryName)) {
-                categories.push(categoryName);
-                saveData();
-                loadAdminData();
-                initializeFilters();
-                showNotification('Категория добавлена');
+            
+            // Count symptoms
+            const symptoms = document.querySelectorAll('input[type="checkbox"]:checked');
+            
+            // Simplified risk calculation
+            let riskScore = 0;
+            
+            if (glypican4 > 2.5) riskScore += 40;
+            else if (glypican4 > 1.5) riskScore += 20;
+            
+            if (age_srage > 0.8) riskScore += 40;
+            else if (age_srage > 0.5) riskScore += 20;
+            
+            riskScore += symptoms.length * 10;
+            
+            // Determine risk level
+            let riskLevel, riskText, riskClass;
+            
+            if (riskScore >= 60) {
+                riskLevel = 'Высокий';
+                riskText = 'Высокий риск наличия СПЯ. Рекомендуется консультация гинеколога-эндокринолога.';
+                riskClass = 'risk-high';
+            } else if (riskScore >= 30) {
+                riskLevel = 'Средний';
+                riskText = 'Умеренный риск наличия СПЯ. Рекомендуется дополнительное обследование.';
+                riskClass = 'risk-medium';
             } else {
-                showNotification('Такая категория уже существует', 'error');
+                riskLevel = 'Низкий';
+                riskText = 'Низкий риск наличия СПЯ. Рекомендуется наблюдение в динамике.';
+                riskClass = 'risk-low';
             }
-        }
-
-        function deleteCategory(categoryName) {
-            if (confirm(`Удалить категорию "${categoryName}"?`)) {
-                categories = categories.filter(c => c !== categoryName);
-                saveData();
-                loadAdminData();
-                initializeFilters();
-                showNotification('Категория удалена');
-            }
-        }
-
-        function addBrand(brandName) {
-            if (!brands.includes(brandName)) {
-                brands.push(brandName);
-                saveData();
-                loadAdminData();
-                initializeFilters();
-                showNotification('Бренд добавлен');
-            } else {
-                showNotification('Такой бренд уже существует', 'error');
-            }
-        }
-
-        function deleteBrand(brandName) {
-            if (confirm(`Удалить бренд "${brandName}"?`)) {
-                brands = brands.filter(b => b !== brandName);
-                saveData();
-                loadAdminData();
-                initializeFilters();
-                showNotification('Бренд удален');
-            }
-        }
-
-        function addColor(colorName, colorValue) {
-            if (!colors.find(c => c.name === colorName)) {
-                colors.push({ name: colorName, value: colorValue });
-                saveData();
-                loadAdminData();
-                initializeFilters();
-                showNotification('Цвет добавлен');
-            } else {
-                showNotification('Такой цвет уже существует', 'error');
-            }
-        }
-
-        function deleteColor(colorName) {
-            if (confirm(`Удалить цвет "${colorName}"?`)) {
-                colors = colors.filter(c => c.name !== colorName);
-                saveData();
-                loadAdminData();
-                initializeFilters();
-                showNotification('Цвет удален');
-            }
-        }
-
-        // INITIALIZATION
-        function initializeFilters() {
-            const categoryFilter = document.getElementById('categoryFilter');
-            const currentCategory = categoryFilter.value;
-            categoryFilter.innerHTML = '<option value="all">Все категории</option>' +
-                categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-            categoryFilter.value = currentCategory;
-
-            const brandFilter = document.getElementById('brandFilter');
-            const currentBrand = brandFilter.value;
-            brandFilter.innerHTML = '<option value="all">Все бренды</option>' +
-                brands.map(brand => `<option value="${brand}">${brand}</option>`).join('');
-            brandFilter.value = currentBrand;
-
-            const colorFilter = document.getElementById('colorFilter');
-            const currentColor = colorFilter.value;
-            colorFilter.innerHTML = '<option value="all">Все цвета</option>' +
-                colors.map(color => `<option value="${color.name}">${color.name}</option>`).join('');
-            colorFilter.value = currentColor;
-        }
-
-        function initializeApp() {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 500);
-
-            saveData();
-            renderProducts();
-            updateCartCounter();
-            initializeFilters();
-
-            const priceSlider = document.getElementById('priceSlider');
-            const priceValue = document.getElementById('priceValue');
             
-            priceSlider.addEventListener('input', function() {
-                priceValue.textContent = this.value;
-                updatePriceSliderBackground();
-            });
-
-            updatePriceSliderBackground();
-
-            window.addEventListener('scroll', () => {
-                const header = document.getElementById('header');
-                if (window.pageYOffset > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
-
-            // EVENT LISTENERS
-            document.getElementById('mainLink').addEventListener('click', (e) => {
-                e.preventDefault();
-                hideProductPage();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            document.getElementById('catalogLink').addEventListener('click', (e) => {
-                e.preventDefault();
-                hideProductPage();
-                document.getElementById('catalog').scrollIntoView({ behavior: 'smooth' });
-            });
-
-            document.getElementById('cartLink').addEventListener('click', (e) => {
-                e.preventDefault();
-                showCart();
-            });
-
-            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-                document.getElementById('navMenu').classList.toggle('active');
-            });
-
-            document.getElementById('backButton').addEventListener('click', hideProductPage);
-
-            document.getElementById('closeCartBtn').addEventListener('click', hideCart);
-            document.getElementById('checkoutBtn').addEventListener('click', () => {
-                if (cart.length === 0) {
-                    showNotification('Корзина пуста!', 'error');
-                    return;
-                }
-                
-                const newOrder = {
-                    id: orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 1,
-                    items: [...cart],
-                    total: cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0),
-                    status: 'new',
-                    date: new Date().toLocaleString('ru-RU')
-                };
-                
-                orders.push(newOrder);
-                cart = [];
-                saveData();
-                updateCartCounter();
-                
-                showNotification('Заказ успешно оформлен! Спасибо за покупку!');
-                hideCart();
-            });
-
-            document.getElementById('cartModal').addEventListener('click', (e) => {
-                if (e.target.id === 'cartModal') {
-                    hideCart();
-                }
-            });
-
-            document.getElementById('infoModal').addEventListener('click', (e) => {
-                if (e.target.id === 'infoModal') {
-                    hideInfo();
-                }
-            });
-
-            document.getElementById('closeInfoBtn').addEventListener('click', hideInfo);
-
-            document.getElementById('categoryFilter').addEventListener('change', applyFilters);
-            document.getElementById('brandFilter').addEventListener('change', applyFilters);
-            document.getElementById('colorFilter').addEventListener('change', applyFilters);
-            document.getElementById('priceSortFilter').addEventListener('change', applyFilters);
-            document.getElementById('priceSlider').addEventListener('input', applyFilters);
-            document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
-            document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
-            document.getElementById('applyFiltersBtn').addEventListener('click', applyFilters);
+            // Display result
+            const resultDiv = document.getElementById('pcos-result');
+            resultDiv.innerHTML = `
+                <div class="${riskClass}">
+                    <i class="fas ${riskClass === 'risk-high' ? 'fa-exclamation-triangle' : riskClass === 'risk-medium' ? 'fa-info-circle' : 'fa-check-circle'}"></i>
+                    <strong>Риск СПЯ: ${riskLevel}</strong> - ${riskText}
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+        }
+        
+        // Modal functions
+        function openBookingModal() {
+            document.getElementById('booking-modal').style.display = 'flex';
+        }
+        
+        function closeBookingModal() {
+            document.getElementById('booking-modal').style.display = 'none';
+        }
+        
+        function submitBooking() {
+            const doctor = document.getElementById('doctor-select').value;
+            const date = document.getElementById('booking-date').value;
+            const time = document.getElementById('booking-time').value;
+            const name = document.getElementById('patient-name').value;
+            const phone = document.getElementById('patient-phone').value;
             
-            let searchTimeout;
-            document.getElementById('headerSearch').addEventListener('input', () => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(applyFilters, 300);
-            });
-            document.getElementById('headerSearchBtn').addEventListener('click', applyFilters);
-            document.getElementById('headerSearch').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') applyFilters();
-            });
-
-            document.getElementById('adminToggleBtn').addEventListener('click', showAdminPanel);
-            document.getElementById('closeAdminBtn').addEventListener('click', hideAdminPanel);
-
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    switchAdminTab(tab.getAttribute('data-tab'));
-                });
-            });
-
-            document.getElementById('addFeatureBtn').addEventListener('click', () => {
-                addFeatureInput('adminFeaturesList');
-            });
-
-            document.getElementById('editAddFeatureBtn').addEventListener('click', () => {
-                addFeatureInput('editFeaturesList');
-            });
-
-            document.getElementById('addProductForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const features = getFeaturesFromContainer('adminFeaturesList');
-                
-                const productData = {
-                    name: document.getElementById('adminProductName').value,
-                    brand: document.getElementById('adminProductBrand').value,
-                    model: document.getElementById('adminProductModel').value,
-                    category: document.getElementById('adminProductCategory').value,
-                    color: document.getElementById('adminProductColor').value,
-                    price: parseInt(document.getElementById('adminProductPrice').value),
-                    image: document.getElementById('adminProductImage').value || 'https://images.unsplash.com/photo-1563013546-77e5ebf937e9?w=400&h=300&fit=crop',
-                    features: features,
-                    description: document.getElementById('adminProductDescription').value || 'Отличное состояние'
-                };
-                addProduct(productData);
-                e.target.reset();
-                setFeaturesToContainer('adminFeaturesList', []);
-            });
-
-            document.getElementById('editProductSelect').addEventListener('change', (e) => {
-                if (e.target.value) {
-                    editProductSelect(parseInt(e.target.value));
-                } else {
-                    document.getElementById('editProductForm').style.display = 'none';
-                }
-            });
-
-            document.getElementById('editProductForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const productId = parseInt(document.getElementById('editProductId').value);
-                const features = getFeaturesFromContainer('editFeaturesList');
-                
-                const productData = {
-                    name: document.getElementById('editProductName').value,
-                    brand: document.getElementById('editProductBrand').value,
-                    model: document.getElementById('editProductModel').value,
-                    category: document.getElementById('editProductCategory').value,
-                    color: document.getElementById('editProductColor').value,
-                    price: parseInt(document.getElementById('editProductPrice').value),
-                    image: document.getElementById('editProductImage').value,
-                    features: features,
-                    description: document.getElementById('editProductDescription').value
-                };
-                updateProduct(productId, productData);
-            });
-
-            document.getElementById('addCategoryForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const categoryName = document.getElementById('newCategoryName').value.trim();
-                if (categoryName) {
-                    addCategory(categoryName);
-                    e.target.reset();
-                }
-            });
-
-            document.getElementById('addBrandForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const brandName = document.getElementById('newBrandName').value.trim();
-                if (brandName) {
-                    addBrand(brandName);
-                    e.target.reset();
-                }
-            });
-
-            document.getElementById('addColorForm').addEventListener('submit', (e) => {
-                e.preventDefault();
-                const colorName = document.getElementById('newColorName').value.trim();
-                const colorValue = document.getElementById('newColorValue').value;
-                if (colorName) {
-                    addColor(colorName, colorValue);
-                    e.target.reset();
-                    document.getElementById('newColorValue').value = '#000000';
-                }
-            });
+            if (!doctor || !date || !time || !name || !phone) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            // In a real application, you would send this data to the server
+            alert(`Спасибо, ${name}! Вы записаны на консультацию на ${date} в ${time}. Мы свяжемся с вами по телефону ${phone} для подтверждения.`);
+            closeBookingModal();
+            
+            // Reset form
+            document.getElementById('booking-form').reset();
         }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeApp);
-        } else {
-            initializeApp();
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('booking-modal');
+            if (event.target === modal) {
+                closeBookingModal();
+            }
         }
+        
+        // Set minimum date to today for booking
+        document.getElementById('booking-date').min = new Date().toISOString().split('T')[0];
     </script>
 </body>
 </html>
