@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Next Phone - Б/у техника с гарантией</title>
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADGklEQVR4nO2WS2gTURSGv5lJkzRp0zRNX7ZVW7W+wAcqKoqCCxcuXLhw40YRFy5c6MaFGx/gQkEQBEVBRRBBEBQfqOBCfKAoKj5Q1FqrtTZt0iZNkzQzmYkzk0nTJjOTpAv/1Vzu/c+5/zlnzr0w2P+vAjgDnAWiwCjQAnQCvcAH4DbwCLgLvAYkYDnQD8SAz0ACGAE+Ar3Ae+AZcB+4CdwAXgKLgN+5BLLAe+AYUAWUAMuBw8ANYAK4BxwFtgKbgRpgGbAYqAWOAL3AGHAP2A1sAaqBUmABUAkcAr4Aj4GjwA6gEagDFgIVwH7gMzAI3AJ2AhuBBqAcCANlwF7gKzAE3AH2ABuAeqAECAJhYA/wDfgG3AX2AuuBOiAEBAAfsBv4DvwA7gP7gHVALRAE/IAX2AX8BH4CD4ADwFqgBggAPmAH8Av4BTwEDgJrgGogAPiB7cBv4DfwCDgErAaqAB/gBbYBv4E/wGPgMLASqAR8gAfYCvwFJoEnwBFgBVAB+AAPsAX4C0wBT4GjQANQDngBN7AZ+AdMA8+AY8ByoAzwAG5gE/APmAGeA8eBRqAU8AIuYCPwH5gFXgAngCYgBHgAF7AB+A/MAi+Bk8AKIAh4ABewHvgPzAGvgFPASiAIuAEnsA74D8wDr4HTQBMQANyAA1gL/AfmgdfAGaAZCABOwA6sBf4BC8Ab4CzQAgQAJ2AH1gD/gAXgLXAOaAUCgBOwAauBf8Ai8A44D7QBAcABrAL+AovAe+ACsAoIAA7AATQCGWAJeA9cBFYDAcAO2IFGIAM4gQ/AJaAdCAJ2wA40ABnABXwELgNrgCBgB2xAPZAB3MBH4AqwFggCNsAG1AEZwAN8Aq4C64AgYAOsQC2QATzAZ+AasB4IATbACtQAGcALfAGuAxuAEGAFLEA1kAF8wFfgBrARCANWwAJUARnAD3wDbgKbgDBgASxAJZABAkAncAvYDIQBC2AGKoAMEAS+A7eBLUAYMANmoAzIACHgB3AH2AqEATNgAsqADBACfgJ3ge1AGDABRqAUyABh4BdwD9gBhAETYABKgAwQAX4D94GdQBgwAgYgBGSAKPAHuA/sAv4P638BnhDLMm+1proAAAAASUVORK5CYII=">
+    <link rel="icon" href="https://img.icons8.com/color/48/000000/iphone-x.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -658,6 +658,10 @@
             font-weight: 800;
         }
 
+        .product-features {
+            margin-top: 0;
+        }
+
         .features-list {
             list-style: none;
             margin-top: 1.5rem;
@@ -676,6 +680,12 @@
             font-weight: bold;
             margin-right: 0.75rem;
             font-size: 1.2rem;
+        }
+
+        .product-description {
+            line-height: 1.7;
+            color: #4a5568;
+            font-size: 1.05rem;
         }
 
         .back-button {
@@ -1503,7 +1513,6 @@
         </div>
     </div>
 
-    <!-- Info Modal -->
     <div class="info-modal" id="infoModal">
         <div class="info-content">
             <h3 id="infoTitle"></h3>
@@ -1512,7 +1521,6 @@
         </div>
     </div>
 
-    <!-- Admin Panel (сокращенная версия для экономии места) -->
     <div class="admin-panel" id="adminPanel">
         <div class="admin-header">
             <h3><i class="fas fa-cog"></i> Панель администратора</h3>
@@ -1745,8 +1753,8 @@
     </footer>
 
     <script>
-        // DATA - Расширенный каталог товаров
-        let products = JSON.parse(localStorage.getItem('nextPhoneProducts')) || [
+        // DATA - 10 ТОВАРОВ С ПОДРОБНЫМИ ХАРАКТЕРИСТИКАМИ
+        const defaultProducts = [
             {
                 id: 1,
                 name: "iPhone 13 Pro Max",
@@ -1993,8 +2001,9 @@
             }
         ];
 
+        let products = JSON.parse(localStorage.getItem('nextPhoneProducts')) || defaultProducts;
         let categories = JSON.parse(localStorage.getItem('nextPhoneCategories')) || ["Смартфоны", "Ноутбуки", "Планшеты", "Наушники"];
-        let brands = JSON.parse(localStorage.getItem('nextPhoneBrands')) || ["Apple", "Samsung", "Xiaomi", "Huawei", "Sony"];
+        let brands = JSON.parse(localStorage.getItem('nextPhoneBrands')) || ["Apple", "Samsung", "Xiaomi", "Sony"];
         let colors = JSON.parse(localStorage.getItem('nextPhoneColors')) || [
             { name: "Черный", value: "#000000" },
             { name: "Белый", value: "#ffffff" },
@@ -2008,6 +2017,12 @@
 
         let cart = JSON.parse(localStorage.getItem('nextPhoneCart')) || [];
         let orders = JSON.parse(localStorage.getItem('nextPhoneOrders')) || [];
+
+        // Если товаров нет - загружаем дефолтные
+        if (products.length === 0) {
+            products = defaultProducts;
+            localStorage.setItem('nextPhoneProducts', JSON.stringify(products));
+        }
 
         // Info content
         const infoContent = {
@@ -2286,7 +2301,6 @@
                             <span>${product.category}</span>
                         </div>
                         <div class="product-price">${product.price.toLocaleString()} ₽</div>
-                        <p class="product-description">${product.description}</p>
                         
                         ${product.features && product.features.length > 0 ? `
                         <div class="product-features">
@@ -2296,6 +2310,8 @@
                             </ul>
                         </div>
                         ` : ''}
+                        
+                        <p class="product-description">${product.description}</p>
                         
                         <button class="add-to-cart" onclick="addToCart(${product.id})" style="max-width: 300px;">
                             <i class="fas fa-shopping-cart"></i> Добавить в корзину
@@ -2466,7 +2482,7 @@
             slider.style.setProperty('--value', value + '%');
         }
 
-        // ADMIN FUNCTIONS (сокращенная версия)
+        // ADMIN FUNCTIONS (сокращенная версия для экономии места)
         function showAdminPanel() {
             document.getElementById('adminPanel').classList.add('show');
             loadAdminData();
