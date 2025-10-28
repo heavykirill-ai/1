@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Next Phone - Б/у техника с гарантией</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23b3005e;stop-opacity:1' /%3E%3Cstop offset='100%25' style='stop-color:%23ff2b8c;stop-opacity:1' /%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='url(%23grad)'/%3E%3Cpath d='M30 25 h40 v50 h-40 z' fill='white' opacity='0.9'/%3E%3Crect x='35' y='30' width='30' height='35' rx='3' fill='url(%23grad)'/%3E%3Ccircle cx='50' cy='70' r='3' fill='white'/%3E%3C/svg%3E">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAADGklEQVR4nO2WS2gTURSGv5lJkzRp0zRNX7ZVW7W+wAcqKoqCCxcuXLhw40YRFy5c6MaFGx/gQkEQBEVBRRBBEBQfqOBCfKAoKj5Q1FqrtTZt0iZNkzQzmYkzk0nTJjOTpAv/1Vzu/c+5/zlnzr0w2P+vAjgDnAWiwCjQAnQCvcAH4DbwCLgLvAYkYDnQD8SAz0ACGAE+Ar3Ae+AZcB+4CdwAXgKLgN+5BLLAe+AYUAWUAMuBw8ANYAK4BxwFtgKbgRpgGbAYqAWOAL3AGHAP2A1sAaqBUmABUAkcAr4Aj4GjwA6gEagDFgIVwH7gMzAI3AJ2AhuBBqAcCANlwF7gKzAE3AH2ABuAeqAECAJhYA/wDfgG3AX2AuuBOiAEBAAfsBv4DvwA7gP7gHVALRAE/IAX2AX8BH4CD4ADwFqgBggAPmAH8Av4BTwEDgJrgGogAPiB7cBv4DfwCDgErAaqAB/gBbYBv4E/wGPgMLASqAR8gAfYCvwFJoEnwBFgBVAB+AAPsAX4C0wBT4GjQANQDngBN7AZ+AdMA8+AY8ByoAzwAG5gE/APmAGeA8eBRqAU8AIuYCPwH5gFXgAngCYgBHgAF7AB+A/MAi+Bk8AKIAh4ABewHvgPzAGvgFPASiAIuAEnsA74D8wDr4HTQBMQANyAA1gL/AfmgdfAGaAZCABOwA6sBf4BC8Ab4CzQAgQAJ2AH1gD/gAXgLXAOaAUCgBOwAauBf8Ai8A44D7QBAcABrAL+AovAe+ACsAoIAA7AATQCGWAJeA9cBFYDAcAO2IFGIAM4gQ/AJaAdCAJ2wA40ABnABXwELgNrgCBgB2xAPZAB3MBH4AqwFggCNsAG1AEZwAN8Aq4C64AgYAOsQC2QATzAZ+AasB4IATbACtQAGcALfAGuAxuAEGAFLEA1kAF8wFfgBrARCANWwAJUARnAD3wDbgKbgDBgASxAJZABAkAncAvYDIQBC2AGKoAMEAS+A7eBLUAYMANmoAzIACHgB3AH2AqEATNgAsqADBACfgJ3ge1AGDABRqAUyABh4BdwD9gBhAETYABKgAwQAX4D94GdQBgwAgYgBGSAKPAHuA/sAv4P638BnhDLMm+1proAAAAASUVORK5CYII=">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         * {
@@ -191,6 +191,7 @@
             position: relative;
             padding: 0.5rem 0;
             white-space: nowrap;
+            cursor: pointer;
         }
 
         .nav-menu a:after {
@@ -285,7 +286,7 @@
             }
         }
 
-        /* УЛУЧШЕННЫЕ ФИЛЬТРЫ */
+        /* УЛУЧШЕННЫЕ ФИЛЬТРЫ 3x2 */
         .filters {
             background: white;
             padding: 2.5rem;
@@ -368,12 +369,6 @@
         .filter-group select:hover,
         .filter-group input:hover {
             border-color: #cbd5e0;
-        }
-
-        .price-range-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
         }
 
         .price-slider {
@@ -824,6 +819,83 @@
             margin-top: 1.5rem;
         }
 
+        /* Info Modal */
+        .info-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 5000;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .info-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .info-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .info-content h3 {
+            margin-bottom: 1.5rem;
+            color: #1a1a2e;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #b3005e, #ff2b8c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .info-content p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #4a5568;
+        }
+
+        .info-content ul {
+            margin: 1rem 0 1rem 2rem;
+            color: #4a5568;
+        }
+
+        .info-content ul li {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .close-info-btn {
+            background: linear-gradient(135deg, #6c757d, #868e96);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        .close-info-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 117, 125, 0.3);
+        }
+
         /* Admin Panel */
         .admin-panel {
             background: linear-gradient(135deg, #1a1a2e, #2d2d4e);
@@ -955,7 +1027,6 @@
             resize: vertical;
         }
 
-        /* Динамические характеристики */
         .features-dynamic {
             display: flex;
             flex-direction: column;
@@ -1191,6 +1262,7 @@
             color: rgba(255,255,255,0.8);
             text-decoration: none;
             transition: color 0.3s;
+            cursor: pointer;
         }
 
         .footer-section a:hover {
@@ -1265,7 +1337,6 @@
             }
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 10px;
         }
@@ -1285,18 +1356,15 @@
     </style>
 </head>
 <body>
-    <!-- Loader -->
     <div class="loader" id="loader">
         <div class="loader-spinner"></div>
     </div>
 
-    <!-- Notification -->
     <div class="notification" id="notification">
         <i class="fas fa-check-circle"></i>
         <span id="notificationText"></span>
     </div>
 
-    <!-- Header -->
     <header id="header">
         <div class="nav-container">
             <a href="#" class="logo" id="mainLogo">Next Phone</a>
@@ -1311,14 +1379,13 @@
             </button>
 
             <ul class="nav-menu" id="navMenu">
-                <li><a href="#" id="mainLink">Главная</a></li>
-                <li><a href="#catalog" id="catalogLink">Каталог</a></li>
-                <li><a href="#" id="cartLink">Корзина <span class="cart-counter">0</span></a></li>
+                <li><a id="mainLink">Главная</a></li>
+                <li><a id="catalogLink">Каталог</a></li>
+                <li><a id="cartLink">Корзина <span class="cart-counter">0</span></a></li>
             </ul>
         </div>
     </header>
 
-    <!-- Main Page -->
     <div id="mainPage">
         <section class="hero">
             <h1>Next Phone - Б/у техника</h1>
@@ -1369,20 +1436,6 @@
                     </label>
                     <input type="range" id="priceSlider" class="price-slider" min="0" max="200000" step="1000" value="100000">
                 </div>
-
-                <div class="filter-group">
-                    <label for="minPriceFilter">
-                        <i class="fas fa-arrow-down"></i> Мин. цена
-                    </label>
-                    <input type="number" id="minPriceFilter" placeholder="От 0 ₽" min="0" step="1000">
-                </div>
-
-                <div class="filter-group">
-                    <label for="maxPriceFilter">
-                        <i class="fas fa-arrow-up"></i> Макс. цена
-                    </label>
-                    <input type="number" id="maxPriceFilter" placeholder="До 200000 ₽" min="0" step="1000">
-                </div>
                 
                 <div class="filter-group">
                     <label for="priceSortFilter">
@@ -1395,13 +1448,6 @@
                         <option value="name_asc">По названию (А-Я)</option>
                         <option value="name_desc">По названию (Я-А)</option>
                     </select>
-                </div>
-
-                <div class="filter-group">
-                    <label for="modelFilter">
-                        <i class="fas fa-box"></i> Модель
-                    </label>
-                    <input type="text" id="modelFilter" placeholder="Поиск по модели">
                 </div>
 
                 <div class="filter-group">
@@ -1434,7 +1480,6 @@
         </section>
     </div>
 
-    <!-- Product Page -->
     <div class="product-page" id="productPage">
         <button class="back-button" id="backButton">
             <i class="fas fa-arrow-left"></i> Назад к каталогу
@@ -1442,7 +1487,6 @@
         <div class="product-detail" id="productDetail"></div>
     </div>
 
-    <!-- Cart Modal -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-content">
             <h3><i class="fas fa-shopping-cart"></i> Корзина</h3>
@@ -1459,7 +1503,16 @@
         </div>
     </div>
 
-    <!-- Admin Panel -->
+    <!-- Info Modal -->
+    <div class="info-modal" id="infoModal">
+        <div class="info-content">
+            <h3 id="infoTitle"></h3>
+            <div id="infoBody"></div>
+            <button class="close-info-btn" id="closeInfoBtn">Закрыть</button>
+        </div>
+    </div>
+
+    <!-- Admin Panel (сокращенная версия для экономии места) -->
     <div class="admin-panel" id="adminPanel">
         <div class="admin-header">
             <h3><i class="fas fa-cog"></i> Панель администратора</h3>
@@ -1478,13 +1531,11 @@
         </div>
 
         <div class="admin-content">
-            <!-- Products Section -->
             <div class="admin-section active" id="products-section">
                 <h4>Управление товарами</h4>
                 <div id="adminProductsList"></div>
             </div>
 
-            <!-- Add Product Section -->
             <div class="admin-section" id="add-product-section">
                 <h4>Добавить товар</h4>
                 <form id="addProductForm" class="admin-form">
@@ -1537,7 +1588,6 @@
                 </form>
             </div>
 
-            <!-- Edit Product Section -->
             <div class="admin-section" id="edit-product-section">
                 <h4>Редактировать товар</h4>
                 <div class="form-group">
@@ -1593,7 +1643,6 @@
                 </form>
             </div>
 
-            <!-- Management Section -->
             <div class="admin-section" id="management-section">
                 <h4>Управление категориями, брендами и цветами</h4>
                 <div class="management-grid">
@@ -1635,13 +1684,11 @@
                 </div>
             </div>
 
-            <!-- Stats Section -->
             <div class="admin-section" id="stats-section">
                 <h4>Статистика</h4>
                 <div id="adminStats"></div>
             </div>
 
-            <!-- Orders Section -->
             <div class="admin-section" id="orders-section">
                 <h4>Управление заказами</h4>
                 <div class="management-grid">
@@ -1662,27 +1709,15 @@
         </div>
     </div>
 
-    <!-- Admin Toggle Button -->
     <button class="admin-toggle-btn" id="adminToggleBtn">
         <i class="fas fa-cog"></i> Админ
     </button>
 
-    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
                 <h3>Next Phone</h3>
                 <p>Качественная б/у техника с гарантией. Проверенные устройства по доступным ценам.</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Категории</h3>
-                <ul>
-                    <li><a href="#">Смартфоны</a></li>
-                    <li><a href="#">Ноутбуки</a></li>
-                    <li><a href="#">Планшеты</a></li>
-                    <li><a href="#">Аксессуары</a></li>
-                </ul>
             </div>
             
             <div class="footer-section">
@@ -1697,10 +1732,9 @@
             <div class="footer-section">
                 <h3>Информация</h3>
                 <ul>
-                    <li><a href="#">О нас</a></li>
-                    <li><a href="#">Доставка и оплата</a></li>
-                    <li><a href="#">Гарантия</a></li>
-                    <li><a href="#">Отзывы</a></li>
+                    <li><a onclick="showInfo('about')">О нас</a></li>
+                    <li><a onclick="showInfo('delivery')">Доставка и оплата</a></li>
+                    <li><a onclick="showInfo('reviews')">Отзывы</a></li>
                 </ul>
             </div>
         </div>
@@ -1711,19 +1745,30 @@
     </footer>
 
     <script>
-        // DATA
+        // DATA - Расширенный каталог товаров
         let products = JSON.parse(localStorage.getItem('nextPhoneProducts')) || [
             {
                 id: 1,
-                name: "iPhone 13 Pro",
+                name: "iPhone 13 Pro Max",
                 brand: "Apple",
-                model: "13 Pro",
+                model: "13 Pro Max",
                 category: "Смартфоны",
                 color: "Графитовый",
-                price: 69990,
+                price: 79990,
                 image: "https://images.unsplash.com/photo-1632661674596-618e45e56d61?w=400&h=300&fit=crop",
-                description: "Отличное состояние, 256 ГБ, аккумулятор 95%",
-                features: ["Процессор: A15 Bionic", "Память: 256 ГБ", "Экран: 6.1\" Super Retina XDR", "Камера: Тройная 12 Мп", "5G поддержка"]
+                description: "Флагманский смартфон Apple в отличном состоянии. Батарея держит 95% от оригинальной емкости. Полный комплект с оригинальной коробкой и аксессуарами. Гарантия 6 месяцев.",
+                features: [
+                    "Процессор: Apple A15 Bionic",
+                    "Память: 256 ГБ",
+                    "Экран: 6.7\" Super Retina XDR OLED",
+                    "Камера: Тройная 12 Мп (широкоугольная, ультраширокоугольная, телефото)",
+                    "Фронтальная камера: 12 Мп",
+                    "Батарея: 4352 мАч (95% здоровья)",
+                    "5G поддержка",
+                    "Face ID",
+                    "Водонепроницаемость IP68",
+                    "Беспроводная зарядка MagSafe"
+                ]
             },
             {
                 id: 2,
@@ -1734,35 +1779,339 @@
                 color: "Серебристый",
                 price: 89990,
                 image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400&h=300&fit=crop",
-                description: "2020 год, 8 ГБ ОЗУ, 256 ГБ SSD, идеальное состояние",
-                features: ["Процессор: Apple M1", "ОЗУ: 8 ГБ", "Накопитель: 256 ГБ SSD", "Экран: 13.3\" Retina", "Автономность: до 18 часов"]
+                description: "Революционный ноутбук на чипе Apple M1. Идеальное состояние, 2020 год выпуска. Бесшумная работа, невероятная производительность и автономность до 18 часов. Гарантия 3 месяца.",
+                features: [
+                    "Процессор: Apple M1 (8 ядер)",
+                    "ОЗУ: 8 ГБ унифицированной памяти",
+                    "Накопитель: 256 ГБ SSD",
+                    "Экран: 13.3\" Retina (2560×1600)",
+                    "Графика: Apple M1 GPU (7 ядер)",
+                    "Автономность: до 18 часов",
+                    "Вес: 1.29 кг",
+                    "Touch ID",
+                    "Клавиатура Magic Keyboard с подсветкой",
+                    "2 порта Thunderbolt/USB 4"
+                ]
             },
             {
                 id: 3,
-                name: "Samsung Galaxy S21",
+                name: "Samsung Galaxy S21 Ultra",
                 brand: "Samsung",
-                model: "Galaxy S21",
+                model: "Galaxy S21 Ultra",
                 category: "Смартфоны",
                 color: "Фиолетовый",
-                price: 45990,
+                price: 59990,
                 image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop",
-                description: "128 ГБ, полный комплект, гарантия 6 месяцев",
-                features: ["Процессор: Exynos 2100", "Память: 128 ГБ", "Экран: 6.2\" Dynamic AMOLED", "Камера: Тройная 64 Мп", "Быстрая зарядка 25W"]
+                description: "Топовый флагман Samsung с потрясающим экраном и камерой. 256 ГБ памяти, полный комплект, состояние отличное. Поддержка S Pen. Гарантия 6 месяцев.",
+                features: [
+                    "Процессор: Exynos 2100 (5 нм)",
+                    "Память: 256 ГБ + microSD до 1 ТБ",
+                    "ОЗУ: 12 ГБ",
+                    "Экран: 6.8\" Dynamic AMOLED 2X (3200×1440, 120 Гц)",
+                    "Камера: Квадро 108 Мп + 12 Мп + 10 Мп (3x) + 10 Мп (10x)",
+                    "Фронтальная: 40 Мп",
+                    "Батарея: 5000 мАч",
+                    "Быстрая зарядка 25W",
+                    "Беспроводная зарядка 15W",
+                    "Поддержка S Pen",
+                    "5G, Wi-Fi 6E",
+                    "Водонепроницаемость IP68"
+                ]
+            },
+            {
+                id: 4,
+                name: "iPhone 12",
+                brand: "Apple",
+                model: "12",
+                category: "Смартфоны",
+                color: "Синий",
+                price: 54990,
+                image: "https://images.unsplash.com/photo-1605787020600-b9ebd5df1d07?w=400&h=300&fit=crop",
+                description: "Популярная модель iPhone с поддержкой 5G. 128 ГБ памяти, батарея 92%, отличное состояние. Полный комплект с зарядным устройством. Гарантия 6 месяцев.",
+                features: [
+                    "Процессор: Apple A14 Bionic",
+                    "Память: 128 ГБ",
+                    "Экран: 6.1\" Super Retina XDR OLED",
+                    "Камера: Двойная 12 Мп (широкоугольная + ультраширокоугольная)",
+                    "Фронтальная: 12 Мп",
+                    "Батарея: 2815 мАч (92% здоровья)",
+                    "5G поддержка",
+                    "Face ID",
+                    "Водонепроницаемость IP68",
+                    "MagSafe беспроводная зарядка",
+                    "Ceramic Shield защита экрана"
+                ]
+            },
+            {
+                id: 5,
+                name: "iPad Pro 11\" M1",
+                brand: "Apple",
+                model: "iPad Pro 11",
+                category: "Планшеты",
+                color: "Серый",
+                price: 74990,
+                image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop",
+                description: "Профессиональный планшет на чипе M1. Идеален для работы и творчества. 128 ГБ, Wi-Fi + Cellular. Состояние идеальное, гарантия 3 месяца.",
+                features: [
+                    "Процессор: Apple M1 (8 ядер)",
+                    "Память: 128 ГБ",
+                    "ОЗУ: 8 ГБ",
+                    "Экран: 11\" Liquid Retina (2388×1668, 120 Гц ProMotion)",
+                    "Камера: 12 Мп широкоугольная + 10 Мп ультраширокоугольная",
+                    "Фронтальная: 12 Мп Ultra Wide с Center Stage",
+                    "Батарея: до 10 часов",
+                    "Face ID",
+                    "Поддержка Apple Pencil 2-го поколения",
+                    "Поддержка Magic Keyboard",
+                    "Thunderbolt/USB 4",
+                    "5G (Cellular версия)"
+                ]
+            },
+            {
+                id: 6,
+                name: "Samsung Galaxy Tab S8",
+                brand: "Samsung",
+                model: "Tab S8",
+                category: "Планшеты",
+                color: "Графитовый",
+                price: 49990,
+                image: "https://images.unsplash.com/photo-1585789575347-3a9f5f7f4e1f?w=400&h=300&fit=crop",
+                description: "Мощный Android планшет с S Pen в комплекте. 128 ГБ памяти, отличный экран 120 Гц. Идеален для работы и развлечений. Гарантия 6 месяцев.",
+                features: [
+                    "Процессор: Snapdragon 8 Gen 1",
+                    "Память: 128 ГБ + microSD до 1 ТБ",
+                    "ОЗУ: 8 ГБ",
+                    "Экран: 11\" LTPS TFT (2560×1600, 120 Гц)",
+                    "Камера: 13 Мп + 6 Мп ультраширокоугольная",
+                    "Фронтальная: 12 Мп Ultra Wide",
+                    "Батарея: 8000 мАч",
+                    "Быстрая зарядка 45W",
+                    "S Pen в комплекте",
+                    "4 динамика AKG с Dolby Atmos",
+                    "Wi-Fi 6E",
+                    "Samsung DeX"
+                ]
+            },
+            {
+                id: 7,
+                name: "AirPods Pro 2",
+                brand: "Apple",
+                model: "AirPods Pro 2",
+                category: "Наушники",
+                color: "Белый",
+                price: 19990,
+                image: "https://images.unsplash.com/photo-1606841837239-c5a1a4a07af7?w=400&h=300&fit=crop",
+                description: "Беспроводные наушники с активным шумоподавлением нового поколения. Отличное состояние, полный комплект. Гарантия 3 месяца.",
+                features: [
+                    "Чип: Apple H2",
+                    "Активное шумоподавление",
+                    "Адаптивный прозрачный режим",
+                    "Пространственный звук с динамическим отслеживанием головы",
+                    "Персонализированный пространственный звук",
+                    "Сенсорное управление",
+                    "Защита от пота и воды IPX4",
+                    "Время работы: до 6 часов (до 30 часов с кейсом)",
+                    "MagSafe зарядка",
+                    "Поиск через Find My",
+                    "Динамик в кейсе"
+                ]
+            },
+            {
+                id: 8,
+                name: "Xiaomi 13 Pro",
+                brand: "Xiaomi",
+                model: "13 Pro",
+                category: "Смартфоны",
+                color: "Черный",
+                price: 64990,
+                image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=300&fit=crop",
+                description: "Флагман Xiaomi с камерой Leica. 256 ГБ памяти, Snapdragon 8 Gen 2, отличный экран. Состояние идеальное, гарантия 6 месяцев.",
+                features: [
+                    "Процессор: Snapdragon 8 Gen 2",
+                    "Память: 256 ГБ UFS 4.0",
+                    "ОЗУ: 12 ГБ LPDDR5X",
+                    "Экран: 6.73\" AMOLED (3200×1440, 120 Гц)",
+                    "Камера Leica: 50 Мп основная + 50 Мп телефото + 50 Мп ультраширокоугольная",
+                    "Фронтальная: 32 Мп",
+                    "Батарея: 4820 мАч",
+                    "Быстрая зарядка 120W",
+                    "Беспроводная зарядка 50W",
+                    "Обратная зарядка 10W",
+                    "5G, Wi-Fi 7",
+                    "Водонепроницаемость IP68"
+                ]
+            },
+            {
+                id: 9,
+                name: "MacBook Pro 14\" M2 Pro",
+                brand: "Apple",
+                model: "MacBook Pro 14",
+                category: "Ноутбуки",
+                color: "Серый космос",
+                price: 189990,
+                image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop",
+                description: "Профессиональный ноутбук для сложных задач. M2 Pro чип, 16 ГБ памяти, 512 ГБ SSD. Состояние отличное, гарантия 3 месяца.",
+                features: [
+                    "Процессор: Apple M2 Pro (10 ядер CPU, 16 ядер GPU)",
+                    "ОЗУ: 16 ГБ унифицированной памяти",
+                    "Накопитель: 512 ГБ SSD",
+                    "Экран: 14.2\" Liquid Retina XDR (3024×1964, ProMotion 120 Гц)",
+                    "Яркость: до 1600 нит (HDR)",
+                    "Автономность: до 18 часов",
+                    "Камера: 1080p FaceTime HD",
+                    "Звук: 6 динамиков, пространственный звук",
+                    "3 порта Thunderbolt 4",
+                    "HDMI, SDXC, MagSafe 3",
+                    "Touch ID",
+                    "Вес: 1.6 кг"
+                ]
+            },
+            {
+                id: 10,
+                name: "Sony WH-1000XM5",
+                brand: "Sony",
+                model: "WH-1000XM5",
+                category: "Наушники",
+                color: "Черный",
+                price: 24990,
+                image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=400&h=300&fit=crop",
+                description: "Лучшие полноразмерные наушники с шумоподавлением. Отличное состояние, полный комплект с чехлом. Гарантия 3 месяца.",
+                features: [
+                    "Процессор: Integrated Processor V1",
+                    "Активное шумоподавление (8 микрофонов)",
+                    "Драйверы: 30 мм",
+                    "Поддержка Hi-Res Audio, LDAC",
+                    "Время работы: до 30 часов",
+                    "Быстрая зарядка: 3 мин = 3 часа работы",
+                    "Multipoint подключение",
+                    "Speak-to-Chat",
+                    "Адаптивное управление звуком",
+                    "Складная конструкция",
+                    "Вес: 250 г",
+                    "USB-C зарядка"
+                ]
             }
         ];
 
         let categories = JSON.parse(localStorage.getItem('nextPhoneCategories')) || ["Смартфоны", "Ноутбуки", "Планшеты", "Наушники"];
-        let brands = JSON.parse(localStorage.getItem('nextPhoneBrands')) || ["Apple", "Samsung", "Xiaomi", "Huawei"];
+        let brands = JSON.parse(localStorage.getItem('nextPhoneBrands')) || ["Apple", "Samsung", "Xiaomi", "Huawei", "Sony"];
         let colors = JSON.parse(localStorage.getItem('nextPhoneColors')) || [
             { name: "Черный", value: "#000000" },
             { name: "Белый", value: "#ffffff" },
             { name: "Серебристый", value: "#c0c0c0" },
             { name: "Графитовый", value: "#4a4a4a" },
-            { name: "Фиолетовый", value: "#8a2be2" }
+            { name: "Фиолетовый", value: "#8a2be2" },
+            { name: "Синий", value: "#0066cc" },
+            { name: "Серый", value: "#808080" },
+            { name: "Серый космос", value: "#3d3d3d" }
         ];
 
         let cart = JSON.parse(localStorage.getItem('nextPhoneCart')) || [];
         let orders = JSON.parse(localStorage.getItem('nextPhoneOrders')) || [];
+
+        // Info content
+        const infoContent = {
+            about: {
+                title: "О нас",
+                body: `
+                    <p><strong>Next Phone</strong> — это надежный магазин качественной б/у техники с гарантией.</p>
+                    
+                    <p>Мы работаем на рынке с 2018 года и за это время заслужили доверие тысяч клиентов.</p>
+                    
+                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a2e;">Наши преимущества:</h4>
+                    <ul>
+                        <li>Тщательная проверка каждого устройства перед продажей</li>
+                        <li>Гарантия от 3 до 6 месяцев на все товары</li>
+                        <li>Честное описание состояния техники</li>
+                        <li>Возможность обмена в течение 14 дней</li>
+                        <li>Профессиональная консультация специалистов</li>
+                        <li>Доступные цены на качественную технику</li>
+                    </ul>
+                    
+                    <p style="margin-top: 1.5rem;">Мы проверяем каждое устройство по 50+ параметрам, включая состояние батареи, экрана, камер и всех функций. Вся техника проходит профессиональную чистку и диагностику.</p>
+                    
+                    <p><strong>Наша миссия</strong> — сделать качественную технику доступной для каждого, предоставляя надежный сервис и гарантии.</p>
+                `
+            },
+            delivery: {
+                title: "Доставка и оплата",
+                body: `
+                    <h4 style="margin-bottom: 1rem; color: #1a1a2e;">Способы доставки:</h4>
+                    <ul>
+                        <li><strong>Курьерская доставка по Москве</strong> — бесплатно при заказе от 30 000 ₽, иначе 500 ₽. Доставка в день заказа или на следующий день.</li>
+                        <li><strong>Доставка по России</strong> — СДЭК, Почта России. Стоимость рассчитывается индивидуально. Срок доставки 2-7 дней.</li>
+                        <li><strong>Самовывоз</strong> — бесплатно из нашего магазина по адресу: Москва, ул. Техническая, 15. Ежедневно с 10:00 до 20:00.</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a2e;">Способы оплаты:</h4>
+                    <ul>
+                        <li><strong>Наличными</strong> — при получении курьеру или в магазине</li>
+                        <li><strong>Банковской картой</strong> — на сайте или при получении</li>
+                        <li><strong>Безналичный расчет</strong> — для юридических лиц</li>
+                        <li><strong>Рассрочка</strong> — от банков-партнеров на 3-12 месяцев без переплаты</li>
+                    </ul>
+                    
+                    <h4 style="margin-top: 1.5rem; margin-bottom: 1rem; color: #1a1a2e;">Гарантия и возврат:</h4>
+                    <p>На все товары предоставляется гарантия от 3 до 6 месяцев. Вы можете вернуть или обменять товар в течение 14 дней, если он не подошел.</p>
+                    
+                    <p style="margin-top: 1rem;"><strong>Важно:</strong> При получении обязательно проверьте товар в присутствии курьера. Убедитесь в комплектности и отсутствии внешних повреждений.</p>
+                `
+            },
+            reviews: {
+                title: "Отзывы наших клиентов",
+                body: `
+                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Александр М.</strong> <span style="color: #f39c12;">★★★★★</span></p>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">iPhone 13 Pro Max</p>
+                        <p>"Купил iPhone 13 Pro Max в отличном состоянии. Все работает идеально, батарея действительно 95%. Доставили на следующий день, упаковка отличная. Рекомендую!"</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Мария К.</strong> <span style="color: #f39c12;">★★★★★</span></p>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">MacBook Air M1</p>
+                        <p>"Очень довольна покупкой MacBook Air. Ноутбук как новый, никаких царапин. Работает быстро, батарея держит весь день. Спасибо за честность и качество!"</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Дмитрий П.</strong> <span style="color: #f39c12;">★★★★★</span></p>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">Samsung Galaxy S21 Ultra</p>
+                        <p>"Заказал Samsung S21 Ultra. Пришел в идеальном состоянии, все аксессуары в комплекте. Камера просто огонь! Цена намного ниже, чем новый. Очень доволен!"</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem; padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Елена С.</strong> <span style="color: #f39c12;">★★★★★</span></p>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">iPad Pro 11"</p>
+                        <p>"Купила iPad Pro для работы. Планшет в отличном состоянии, экран без единой царапины. Консультанты помогли с выбором. Гарантия и чек на руках. Всем советую!"</p>
+                    </div>
+                    
+                    <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 12px; border-left: 4px solid #b3005e;">
+                        <p style="margin-bottom: 0.5rem;"><strong>Игорь В.</strong> <span style="color: #f39c12;">★★★★★</span></p>
+                        <p style="color: #666; font-size: 0.9rem; margin-bottom: 0.5rem;">AirPods Pro 2</p>
+                        <p>"Заказывал AirPods Pro 2. Пришли быстро, все оригинальное, работают отлично. Шумоподавление на высоте. Цена очень приятная. Спасибо Next Phone!"</p>
+                    </div>
+                    
+                    <p style="margin-top: 2rem; text-align: center; color: #666;">
+                        <strong>Средняя оценка: 4.9/5</strong> на основе 1247 отзывов
+                    </p>
+                `
+            }
+        };
+
+        // Show info modal
+        function showInfo(type) {
+            const modal = document.getElementById('infoModal');
+            const title = document.getElementById('infoTitle');
+            const body = document.getElementById('infoBody');
+            
+            title.textContent = infoContent[type].title;
+            body.innerHTML = infoContent[type].body;
+            
+            modal.classList.add('show');
+        }
+
+        function hideInfo() {
+            document.getElementById('infoModal').classList.remove('show');
+        }
 
         // UTILITY FUNCTIONS
         function saveData() {
@@ -2063,11 +2412,8 @@
             const brand = document.getElementById('brandFilter').value;
             const color = document.getElementById('colorFilter').value;
             const priceMax = parseInt(document.getElementById('priceSlider').value);
-            const minPrice = parseInt(document.getElementById('minPriceFilter').value) || 0;
-            const maxPrice = parseInt(document.getElementById('maxPriceFilter').value) || Infinity;
             const sortBy = document.getElementById('priceSortFilter').value;
             const searchTerm = document.getElementById('headerSearch').value.toLowerCase().trim();
-            const modelSearch = document.getElementById('modelFilter').value.toLowerCase().trim();
 
             let filteredProducts = products.filter(product => {
                 if (searchTerm && !(
@@ -2079,15 +2425,10 @@
                     return false;
                 }
 
-                if (modelSearch && !product.model.toLowerCase().includes(modelSearch)) {
-                    return false;
-                }
-
                 if (category !== 'all' && product.category !== category) return false;
                 if (brand !== 'all' && product.brand !== brand) return false;
                 if (color !== 'all' && product.color !== color) return false;
                 if (product.price > priceMax) return false;
-                if (product.price < minPrice || product.price > maxPrice) return false;
                 
                 return true;
             });
@@ -2111,11 +2452,8 @@
             document.getElementById('brandFilter').value = 'all';
             document.getElementById('colorFilter').value = 'all';
             document.getElementById('priceSlider').value = 100000;
-            document.getElementById('minPriceFilter').value = '';
-            document.getElementById('maxPriceFilter').value = '';
             document.getElementById('priceSortFilter').value = 'default';
             document.getElementById('headerSearch').value = '';
-            document.getElementById('modelFilter').value = '';
             document.getElementById('availabilityFilter').value = 'all';
             document.getElementById('priceValue').textContent = '100000';
             updatePriceSliderBackground();
@@ -2128,7 +2466,7 @@
             slider.style.setProperty('--value', value + '%');
         }
 
-        // ADMIN FUNCTIONS
+        // ADMIN FUNCTIONS (сокращенная версия)
         function showAdminPanel() {
             document.getElementById('adminPanel').classList.add('show');
             loadAdminData();
@@ -2363,7 +2701,6 @@
             document.getElementById('editProductImage').value = product.image;
             document.getElementById('editProductDescription').value = product.description;
             
-            // Set features
             setFeaturesToContainer('editFeaturesList', product.features);
         }
 
@@ -2476,18 +2813,15 @@
         }
 
         function initializeApp() {
-            // Hide loader
             setTimeout(() => {
                 document.getElementById('loader').classList.add('hidden');
             }, 500);
 
-            // Initialize data
             saveData();
             renderProducts();
             updateCartCounter();
             initializeFilters();
 
-            // Price slider
             const priceSlider = document.getElementById('priceSlider');
             const priceValue = document.getElementById('priceValue');
             
@@ -2498,7 +2832,6 @@
 
             updatePriceSliderBackground();
 
-            // Scroll header effect
             window.addEventListener('scroll', () => {
                 const header = document.getElementById('header');
                 if (window.pageYOffset > 100) {
@@ -2509,7 +2842,6 @@
             });
 
             // EVENT LISTENERS
-            // Navigation
             document.getElementById('mainLink').addEventListener('click', (e) => {
                 e.preventDefault();
                 hideProductPage();
@@ -2527,21 +2859,12 @@
                 showCart();
             });
 
-            document.getElementById('mainLogo').addEventListener('click', (e) => {
-                e.preventDefault();
-                hideProductPage();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-            // Mobile menu
             document.getElementById('mobileMenuBtn').addEventListener('click', () => {
                 document.getElementById('navMenu').classList.toggle('active');
             });
 
-            // Back button
             document.getElementById('backButton').addEventListener('click', hideProductPage);
 
-            // Cart
             document.getElementById('closeCartBtn').addEventListener('click', hideCart);
             document.getElementById('checkoutBtn').addEventListener('click', () => {
                 if (cart.length === 0) {
@@ -2566,26 +2889,29 @@
                 hideCart();
             });
 
-            // Close cart on outside click
             document.getElementById('cartModal').addEventListener('click', (e) => {
                 if (e.target.id === 'cartModal') {
                     hideCart();
                 }
             });
 
-            // Filters
+            document.getElementById('infoModal').addEventListener('click', (e) => {
+                if (e.target.id === 'infoModal') {
+                    hideInfo();
+                }
+            });
+
+            document.getElementById('closeInfoBtn').addEventListener('click', hideInfo);
+
             document.getElementById('categoryFilter').addEventListener('change', applyFilters);
             document.getElementById('brandFilter').addEventListener('change', applyFilters);
             document.getElementById('colorFilter').addEventListener('change', applyFilters);
             document.getElementById('priceSortFilter').addEventListener('change', applyFilters);
             document.getElementById('priceSlider').addEventListener('input', applyFilters);
-            document.getElementById('minPriceFilter').addEventListener('input', applyFilters);
-            document.getElementById('maxPriceFilter').addEventListener('input', applyFilters);
             document.getElementById('availabilityFilter').addEventListener('change', applyFilters);
             document.getElementById('resetFiltersBtn').addEventListener('click', resetFilters);
             document.getElementById('applyFiltersBtn').addEventListener('click', applyFilters);
             
-            // Search
             let searchTimeout;
             document.getElementById('headerSearch').addEventListener('input', () => {
                 clearTimeout(searchTimeout);
@@ -2596,12 +2922,6 @@
                 if (e.key === 'Enter') applyFilters();
             });
 
-            document.getElementById('modelFilter').addEventListener('input', () => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(applyFilters, 300);
-            });
-
-            // Admin panel
             document.getElementById('adminToggleBtn').addEventListener('click', showAdminPanel);
             document.getElementById('closeAdminBtn').addEventListener('click', hideAdminPanel);
 
@@ -2611,7 +2931,6 @@
                 });
             });
 
-            // Features management
             document.getElementById('addFeatureBtn').addEventListener('click', () => {
                 addFeatureInput('adminFeaturesList');
             });
@@ -2620,7 +2939,6 @@
                 addFeatureInput('editFeaturesList');
             });
 
-            // Admin forms
             document.getElementById('addProductForm').addEventListener('submit', (e) => {
                 e.preventDefault();
                 const features = getFeaturesFromContainer('adminFeaturesList');
@@ -2698,7 +3016,6 @@
             });
         }
 
-        // START APP
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initializeApp);
         } else {
